@@ -2,15 +2,15 @@
 #include <Windows.h>
 #include <stdint.h>
 
+#ifdef GH3PLUSCORE_EXPORTS
+	#define GH3PLIBRARY_API __declspec(dllexport) 
+#else
+	#define GH3PLIBRARY_API __declspec(dllimport) 
+#endif
 
-namespace gh3p
+namespace GH3P
 {
-    const uint8_t GH3_MAX_PLAYERS = 2;
-
-    const LPVOID GH3_CODE_START = (LPVOID)0x00401010;
-    const SIZE_T GH3_CODE_SIZE = 0x00490000;
-
-    class ScopedUnprotect
+    class GH3PLIBRARY_API ScopedUnprotect final
     {
     private:
         DWORD oldProtect_;

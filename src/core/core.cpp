@@ -10,7 +10,6 @@
 
 
 bool lendswith(LPCWSTR str, LPCWSTR ending);
-void lstrcpytolower(LPCWSTR source, LPWSTR dest, size_t size);
 HANDLE LoadPlugin(LPCWSTR plugin, std::wofstream &log);
 
 
@@ -63,13 +62,13 @@ HANDLE LoadPlugin(LPCWSTR plugin, std::wofstream &log)
 	dir.append(lowerPlugin2);
 	
     HANDLE pluginHandle = LoadLibraryW(dir.c_str());
-    if (pluginHandle != INVALID_HANDLE_VALUE)
+    if (pluginHandle != INVALID_HANDLE_VALUE && pluginHandle != NULL)
     {
         log << L"Loaded " << dir.c_str() << " at " << pluginHandle << L"\n";
     }
     else
     {
-        log << L"Failed to load " << dir.c_str() << L"\n";
+        log << L"Failed to load " << dir.c_str() << L". Error code given: " << GetLastError() << L"\n";
     }
     return pluginHandle;
     

@@ -1,7 +1,10 @@
-#include "GH3Plus.h"
-#include "GH3Keys.h"
-#include "GH3GlobalAddresses.h"
+#include "gh3\GH3Keys.h"
+#include "gh3\GH3GlobalAddresses.h"
+#include "core\Patcher.h"
 #include "doubleNotes.h"
+#include <stdint.h>
+
+static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
 __declspec(naked) void tinyJump()
 {
@@ -15,5 +18,5 @@ __declspec(naked) void tinyJump()
 
 void ApplyHack()
 {
-    gh3p::WriteJmp((LPVOID)0x0041D288, &tinyJump);
+    g_patcher.WriteJmp((void *)0x0041D288, &tinyJump);
 }

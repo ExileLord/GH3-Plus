@@ -2,16 +2,18 @@
 //
 
 #include "mirrorMode.h"
-#include <GH3Plus.h>
-#include <Windows.h>
+#include "core\Patcher.h"
 #include <stdint.h>
 
-static const LPVOID CreateNote = (LPVOID)0x0041AB60;
 
-static const LPVOID createNoteDetour = (LPVOID)0x0041D41B;
-static const LPVOID getFretsForHopoCheckDetour = (LPVOID)0x0041D1D4;
+static void * const CreateNote = (void *)0x0041AB60;
+
+static void * const createNoteDetour = (void *)0x0041D41B;
+static void * const getFretsForHopoCheckDetour = (void *)0x0041D1D4;
 
 uint32_t __stdcall getFretsFromUnkReverse(int *noteThis);
+
+static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
 enum class EFretMask : uint32_t
 {
@@ -120,7 +122,7 @@ uint32_t __stdcall getFretsFromUnkReverse(int *noteThis)
 
 void ApplyHack()
 {
-    gh3p::WriteJmp(createNoteDetour, &createNoteReversedNaked);
-    gh3p::WriteJmp(getFretsForHopoCheckDetour, &getFretsFromUnkReverseNaked);
+    g_patcher.WriteJmp(createNoteDetour, &createNoteReversedNaked);
+    g_patcher.WriteJmp(getFretsForHopoCheckDetour, &getFretsFromUnkReverseNaked);
 }
 

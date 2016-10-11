@@ -1,8 +1,11 @@
 #include "ScopedUnprotect.h"
 #include <Windows.h>
 
-namespace gh3p
+namespace GH3P
 {
+	static const LPVOID GH3_CODE_START = (LPVOID)0x00401010;
+	static const SIZE_T GH3_CODE_SIZE = 0x00490000;
+
     ScopedUnprotect::ScopedUnprotect() : ScopedUnprotect(GH3_CODE_START, GH3_CODE_SIZE)
     {
     }

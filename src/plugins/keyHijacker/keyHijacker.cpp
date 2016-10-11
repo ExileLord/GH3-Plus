@@ -1,9 +1,9 @@
-#include "GH3Plus.h"
-#include "GH3Keys.h"
-#include "GH3GlobalAddresses.h"
 #include "keyHijacker.h"
 #include "resource.h"
-#include <WinBase.h>
+#include "core\Patcher.h"
+#include "gh3\GH3Keys.h"
+#include "gh3\GH3GlobalAddresses.h"
+//#include <WinBase.h>
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
@@ -21,14 +21,15 @@ static uint32_t g_lastValue = 0x00000000;
 
 static uint32_t g_lastFloatKey = 0x00000000;
 static uint32_t g_probableSongSpeed = 0x00000000;
+static uint32_t g_probableSongPitch = 0x00000000;
 
 static float g_hackedSpeed = 1.0f;
+static float g_hackedPitch = 1.0f;
 static int32_t g_currentInt = 100;
 static int32_t g_multiplier = 0;
 static bool g_keyHeld = false;
 
-
-
+static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
 
 
@@ -79,12 +80,21 @@ __declspec(naked) void hijackCase2Naked()
         mov     eax, g_probableSongSpeed;
         sub     eax, 0xC;
         cmp     eax, ebx;
-        jz      HIJACK
+        jz      HIJACKSPEED
+
+//         mov     eax, g_probableSongPitch;
+//         sub     eax, 0xC;
+//         cmp     eax, ebx;
+//         jz      HIJACKPITCH
+
         movss   dword ptr[ebx + 0xC], xmm0;
 
         mov     eax, [ebx + 0xC];
         cmp     eax, 0x3F2AAAAC; //0.6666
         jz      STORESPEED
+
+//         cmp     eax, 0x3FC00000; //1.5
+//         jz      STOREPITCH
 
         jmp     returnAddress;
 
@@ -92,23 +102,55 @@ __declspec(naked) void hijackCase2Naked()
         mov     eax, g_probableSongSpeed;
         cmp     eax, 0;
         jnz     DONTSTORE;
-        lea     eax, [ebx + 0xC];
 
+        lea     eax, [ebx + 0xC];
         cmp     eax, 0x0B001111;
         jle     DONTSTORE;
         cmp     eax, 0x0F001111;
         jge     DONTSTORE;
 
         mov     g_probableSongSpeed, eax;
+        jmp     returnAddress;
+    
+//     STOREPITCH:
+//         mov     eax, g_probableSongPitch;
+//         cmp     eax, 0;
+//         jnz     DONTSTORE;
+//         mov     eax, g_probableSongSpeed; //Don't store if game speed hasn't been found
+//         cmp     eax, 0;
+//         jz      DONTSTORE;
+// 
+//         lea     eax, [ebx + 0xC];
+//         cmp     eax, 0x0A000000;
+//         jle     DONTSTORE;
+//         cmp     eax, 0x0C000000;
+//         jge     DONTSTORE;
+// 
+//         mov     g_probableSongPitch, eax;
+//         jmp     returnAddress;
+
     DONTSTORE:
         jmp     returnAddress;
 
-    HIJACK:
+    HIJACKSPEED:
         mov     eax, g_hackedSpeed;
         mov     [ebx + 0xC], eax;
         jmp     returnAddress;
+
+//     HIJACKPITCH:
+//         mov     eax, g_hackedPitch;
+//         mov[ebx + 0xC], eax;
+//         jmp     returnAddress;
     }
 }
+
+//00539004 <- where pitch gets set yo
+
+
+
+
+
+
 
 int32_t getKeypadNumber();
 
@@ -117,9 +159,13 @@ void applyNewSpeed( int32_t newSpeed )
     if (newSpeed <= 0)
         return;
     g_hackedSpeed = (float)(newSpeed / 100.0f);
+    g_hackedPitch = 1.0f / g_hackedSpeed;
     
     if (g_probableSongSpeed != 0x00000000)
         *((float *)g_probableSongSpeed) = g_hackedSpeed;
+
+    if (g_probableSongPitch != 0x00000000)
+        *((float *)g_probableSongPitch) = g_hackedPitch;
 }
 
 void resetKeys()
@@ -143,8 +189,9 @@ void checkKeys()
             applyNewSpeed(g_multiplier);
             resetKeys();
             
-            PlayResource(MAKEINTRESOURCE(IDR_WAVE1));
+            //PlayResource(MAKEINTRESOURCE(IDR_WAVE1));
             //PlaySound(MAKEINTRESOURCE(IDR_WAVE1), NULL, SND_RESOURCE | SND_ASYNC);
+            PlaySound(TEXT("quack.wav"), NULL, SND_FILENAME | SND_ASYNC);
         }
 
     }
@@ -192,13 +239,13 @@ _declspec(naked) void checkKeysNaked()
 
 
 
-void ApplyHack(HINSTANCE module)
+void ApplyHack()
 {
     //gh3p::WriteJmp(GetDWord, &storeLastKeyNaked);
     //gh3p::WriteJmp(GetFloatDetour, &storeFloatKeyNaked);
     //gh3p::WriteJmp(HijackGetFloatDetour, &hijackGetFloatNaked);
-    gh3p::WriteJmp(SetCase2Detour, &hijackCase2Naked);
-    gh3p::WriteJmp(gameFrameDetour, &checkKeysNaked);
+    g_patcher.WriteJmp(SetCase2Detour, &hijackCase2Naked);
+    g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
 
     
 }

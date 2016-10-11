@@ -1,7 +1,6 @@
 #pragma once
 
 
-
 void ApplyHack();
 
 

@@ -1,28 +1,32 @@
-#include "GH3Plus.h"
-#include "GH3Keys.h"
-#include "GH3GlobalAddresses.h"
 #include "whammyFix.h"
-#include <WinBase.h>
+#include "core\Patcher.h"
+#include "gh3\GH3Keys.h"
+#include "gh3\GH3GlobalAddresses.h"
+#include <Windows.h>
 
-static const LPVOID controllerRelatedStart = (LPVOID)0x00522CD0;
-static const LPVOID controllerInputDetour = (LPVOID)0x005249C5;
+static const uint32_t GH3_MAX_PLAYERS = 2;
 
-static uint32_t g_clock[gh3p::GH3_MAX_PLAYERS] = { 0 };
-static uint8_t g_prevWhammy[gh3p::GH3_MAX_PLAYERS] = { 0 };
-static uint8_t g_prevRealWhammy[gh3p::GH3_MAX_PLAYERS] = { 0 };
-static uint64_t g_lastChange[gh3p::GH3_MAX_PLAYERS] = { 0 };
+//Detours
+static void * const controllerRelatedStart = (void *)0x00522CD0;
+static void * const controllerInputDetour = (void *)0x005249C5;
+
+//Static variables for hack functionality
+static uint32_t g_clock[GH3_MAX_PLAYERS] = { 0 };
+static uint8_t g_prevWhammy[GH3_MAX_PLAYERS] = { 0 };
+static uint8_t g_prevRealWhammy[GH3_MAX_PLAYERS] = { 0 };
+static uint64_t g_lastChange[GH3_MAX_PLAYERS] = { 0 };
 
 static uint32_t controllerStructBuffer=0xDEADC0DE;
 
-static uint32_t g_structure[gh3p::GH3_MAX_PLAYERS] = { 0 };
-static uint32_t g_player[gh3p::GH3_MAX_PLAYERS] = { 0 };
+static uint32_t g_structure[GH3_MAX_PLAYERS] = { 0 };
+static uint32_t g_player[GH3_MAX_PLAYERS] = { 0 };
 
 static const uint32_t whammyThreshold = 200;
 static const uint8_t minWibble = 24;
 
-
 uint8_t __stdcall modifyWhammyInput(uint32_t controllerStruct, uint32_t rawInput); 
 
+static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
 
 __declspec(naked) void storeControllerStructNaked()
@@ -67,7 +71,7 @@ uint32_t getPlayerIndex(uint32_t controllerStructPtr)
 
     //use the controllerStruct
 
-    for (uint32_t i = 0; i < gh3p::GH3_MAX_PLAYERS; ++i)
+    for (uint32_t i = 0; i < GH3_MAX_PLAYERS; ++i)
     {
         if (controllerStructPtr == g_structure[i])
             return g_player[i];
@@ -75,7 +79,7 @@ uint32_t getPlayerIndex(uint32_t controllerStructPtr)
 
     //shift existing cells right and push current at 0
 
-    for (uint32_t i = gh3p::GH3_MAX_PLAYERS - 1; i > 0; --i)
+    for (uint32_t i = GH3_MAX_PLAYERS - 1; i > 0; --i)
     {
         g_structure[i] = g_structure[i - 1];
         g_player[i] = g_player[i - 1];
@@ -83,7 +87,7 @@ uint32_t getPlayerIndex(uint32_t controllerStructPtr)
 
     g_structure[0] = controllerStructPtr;
     g_player[0] = newestPlayer;
-    newestPlayer = (newestPlayer + 1) % gh3p::GH3_MAX_PLAYERS;
+    newestPlayer = (newestPlayer + 1) % GH3_MAX_PLAYERS;
 
     return g_player[0];
 }
@@ -129,11 +133,11 @@ uint8_t __stdcall modifyWhammyInput(uint32_t controllerStruct, uint32_t rawInput
 
 void ApplyHack()
 {
-    for (int i = 0; i < gh3p::GH3_MAX_PLAYERS; ++i)
+    for (int i = 0; i < GH3_MAX_PLAYERS; ++i)
     {
         g_structure[i] = 0xD15EA5ED;
         g_player[i] = 0xDEADFACE;
     }
-    gh3p::WriteJmp(controllerRelatedStart, &storeControllerStructNaked);
-    gh3p::WriteJmp(controllerInputDetour, &modifyWhammyInputNaked);
+    g_patcher.WriteJmp(controllerRelatedStart, &storeControllerStructNaked);
+    g_patcher.WriteJmp(controllerInputDetour, &modifyWhammyInputNaked);
 }

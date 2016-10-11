@@ -1,24 +1,20 @@
+#include "GH3Plus.h"
+#include "GH3Keys.h"
+#include "GH3GlobalAddresses.h"
 #include "tiltFix.h"
-#include "core\Patcher.h"
-#include "gh3\GH3Keys.h"
-#include "gh3\GH3GlobalAddresses.h"
-#include <stdint.h>
-#include <Windows.h>
+#include <WinBase.h>
 
-const uint32_t GH3_MAX_PLAYERS = 2;
-
-//Detours
-static void * const starPowerCheckDetour = (void *)0x0042E194;
-
-// Static variables used by hack
-static bool g_isTilting[GH3_MAX_PLAYERS] = { false };
-static uint64_t g_tiltStart[GH3_MAX_PLAYERS] = { 0 };
-static const uint64_t g_timeThreshold = 250;
-static float g_tiltAngleThreshold = -0.85;
-
-static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
+//0042E194
+static const LPDWORD starPowerCheckDetour = (LPDWORD)0x0042E194;
 
 
+static bool g_isTilting[gh3p::GH3_MAX_PLAYERS] = { false };
+static uint64_t g_tiltStart[gh3p::GH3_MAX_PLAYERS] = { 0 };
+static const uint64_t g_timeThreshold = 300;
+static float g_tiltAngleThreshold = -1.5;
+
+
+//[esp+24] < tilt
 
 bool __stdcall tiltFix(float tilt);
 
@@ -29,7 +25,7 @@ __declspec(naked) void tiltFixNaked()
 
     _asm
     {
-        mov	eax, [esp + 0x24]; // tilt
+        mov	eax, [esp + 0x24];
         pushad;
 
         push eax;
@@ -78,5 +74,5 @@ bool __stdcall tiltFix(float tilt)
 
 void ApplyHack()
 {
-    g_patcher.WriteJmp(starPowerCheckDetour, tiltFixNaked);
+    gh3p::WriteJmp(starPowerCheckDetour, tiltFixNaked);
 }
