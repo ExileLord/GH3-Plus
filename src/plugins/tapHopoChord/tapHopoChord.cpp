@@ -22,6 +22,13 @@ __asm pop eax \
 __asm pop ebp \
 __asm pop esp \
 
+
+///Determines which tapping gem sprite to use under starpower since we don't have a starpower texture
+//Set this to 0 to use the green note texture
+//            1 to use the red note texture
+//            2 to use the yellow note texture
+//            3 to use the blue note texture
+//            4 to use the orange note texture
 #define SP_TAP_NOTE_GEM_INDEX 3
 
 
@@ -547,8 +554,8 @@ __declspec(naked) void makeSpTapGemsNaked()
 		cmp		ebp, edx;
 		mov		edx, 1;
 		jnz		NORMAL_NOTE;
-
-	TAP_NOTE:     
+   
+		//Tap notes
 		mov		eax, SP_TAP_NOTE_GEM_INDEX;
 		mov     edi, [ADDR_gemMatBattle2 + eax * 4]; // g_gemMatHammerSp2[eax * 4]
 		jmp		returnAddress;
@@ -712,7 +719,6 @@ _declspec(naked) void gemMutationStarOverlapBranchNaked()
 		jmp		gemMutationStarOverlapBranch_Exit;
 	}
 }
-
 
 void ApplyHack()
 {

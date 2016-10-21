@@ -50,5 +50,8 @@
     <ClInclude Include="QBKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GH3Plus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

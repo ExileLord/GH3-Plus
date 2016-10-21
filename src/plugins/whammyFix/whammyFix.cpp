@@ -6,9 +6,6 @@
 
 static const uint32_t GH3_MAX_PLAYERS = 2;
 
-//Detours
-static void * const controllerRelatedStart = (void *)0x00522CD0;
-static void * const controllerInputDetour = (void *)0x005249C5;
 
 //Static variables for hack functionality
 static uint32_t g_clock[GH3_MAX_PLAYERS] = { 0 };
@@ -29,6 +26,9 @@ uint8_t __stdcall modifyWhammyInput(uint32_t controllerStruct, uint32_t rawInput
 static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
 
+
+
+static void * const controllerRelatedStart = (void *)0x00522CD0;
 __declspec(naked) void storeControllerStructNaked()
 {
     static const uint32_t returnAddress = 0x00522CD6;
@@ -40,6 +40,10 @@ __declspec(naked) void storeControllerStructNaked()
     }
 }
 
+
+
+
+static void * const controllerInputDetour = (void *)0x005249C5;
 __declspec(naked) void modifyWhammyInputNaked()
 {
     static const uint32_t returnAddress = 0x005249CF;

@@ -9,10 +9,6 @@
 #include "core.h"
 
 
-bool lendswith(LPCWSTR str, LPCWSTR ending);
-HANDLE LoadPlugin(LPCWSTR plugin, std::wofstream &log);
-
-
 std::vector<HANDLE> g_loadedPlugins;
 
 void LoadPlugins()

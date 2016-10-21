@@ -1,6 +1,8 @@
 #include "PatchManager.h"
 #include "ScopedUnprotect.h"
 #include <algorithm>
+#include <vector>
+#include <map>
 
 namespace GH3P
 {
@@ -36,11 +38,6 @@ namespace GH3P
 
 		patchStart = nullptr;
 		patchOwner = 0x00000000;
-	}
-
-	bool PatchManager::ApplyPatch(const std::vector<uint8_t>& src, uint8_t * dest, uint32_t ownerID)
-	{
-		return PatchManager::ApplyPatch(reinterpret_cast<const uint8_t *>(&(src[0])), dest, src.size(), ownerID);
 	}
 
 	bool PatchManager::ApplyPatch(const uint8_t *src, uint8_t *dest, uint32_t size, uint32_t ownerID)
