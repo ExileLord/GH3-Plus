@@ -3,7 +3,6 @@
 #include "core\Patcher.h"
 #include "gh3\GH3Keys.h"
 #include "gh3\GH3GlobalAddresses.h"
-//#include <WinBase.h>
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
@@ -11,15 +10,7 @@
 #pragma comment(lib,"Winmm.lib")
 
 static const LPVOID changeDetour = (LPVOID)0x00538EF4;
-
-
-static uint32_t g_lastKey = 0x00000000;
-static uint32_t g_lastFlag = 0x00000000;
-static uint32_t g_lastValue = 0x00000000;
-
-static uint32_t g_lastFloatKey = 0x00000000;
-static uint32_t g_probableSongSpeed = 0x00000000;
-static uint32_t g_probableSongPitch = 0x00000000;
+static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
 
 static float g_hackedSpeed = 1.0f;
 static float g_hackedPitch = 1.0f;
@@ -66,7 +57,7 @@ BOOL PlayResource(LPCWSTR lpName)
 
 __declspec(naked) void changeOverrideNaked()
 {
-    static const uint32_t returnAddress = 0x538EFA; // TODO
+    static const uint32_t returnAddress = 0x538EFA;
     static const uint32_t speedFactorKey = 0x16D91BC1;
     static const uint32_t structureNameKey = 0xFD2C9E38;
     static const uint32_t pitchStructKey = 0x3370A847;
@@ -117,7 +108,7 @@ __declspec(naked) void changeOverrideNaked()
 
 int32_t getKeypadNumber();
 
-void applyNewSpeed( int32_t newSpeed )
+void applyNewSpeed(int32_t newSpeed)
 {
     if (newSpeed <= 0)
         return;
@@ -146,11 +137,8 @@ void checkKeys()
             applyNewSpeed(g_multiplier);
             resetKeys();
             
-            //PlayResource(MAKEINTRESOURCE(IDR_WAVE1));
-            //PlaySound(MAKEINTRESOURCE(IDR_WAVE1), NULL, SND_RESOURCE | SND_ASYNC);
             PlaySound(TEXT("quack.wav"), NULL, SND_FILENAME | SND_ASYNC);
         }
-
     }
 
     if (g_keyHeld && number == -1)
@@ -167,14 +155,13 @@ int32_t getKeypadNumber()
 
     for (int i = 0; i < 10; ++i)
     {
-        if ( (keys[VK_NUMPAD0 + i] & 0x80) || (keys['0' + i]) & 0x80)
+        if ( (keys[VK_NUMPAD0 + i] & 0x80) || (keys['0' + i] & 0x80) )
             return i;
     }
 
     return -1;
 }
 
-static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
 _declspec(naked) void checkKeysNaked()
 {
     static const uint32_t returnAddress = 0x005B0C59;
@@ -194,13 +181,8 @@ _declspec(naked) void checkKeysNaked()
     }
 }
 
-
-
 void ApplyHack()
 {
-    //gh3p::WriteJmp(GetDWord, &storeLastKeyNaked);
-    //gh3p::WriteJmp(GetFloatDetour, &storeFloatKeyNaked);
-    //gh3p::WriteJmp(HijackGetFloatDetour, &hijackGetFloatNaked);
     g_patcher.WriteJmp(changeDetour, &changeOverrideNaked);
     g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
 }
