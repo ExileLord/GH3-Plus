@@ -13,9 +13,11 @@ static const LPVOID changeDetour = (LPVOID)0x00538EF0;
 static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
 static uint32_t changeSpeedStruct[] = { 0x00010000, 0xCDCDCDCD,
     0x00000500, 0x16D91BC1, 0x3F800000, 0x00000000 };
+#ifdef PITCHSHIFT
 static uint32_t changePitchStruct[] = { 0x00010000, 0xCDCDCDCD,
     0x00001B00, 0xFD2C9E38, 0x3370A847, 0xCDCDCDCD,
     0x00000500, 0xD8604126, 0x3F800000, 0x00000000 };
+#endif
 
 static float g_hackedSpeed = 1.0f;
 static float g_hackedPitch = 1.0f;
@@ -90,10 +92,12 @@ __declspec(naked) void changeOverrideNaked()
         push    eax;
         call    CHANGE;
         pop     eax; // remove the stack item that change didn't clean up
+#ifdef PITCHSHIFT
         lea     eax, changePitchStruct;
         push    eax;
         call    CHANGE;
         pop     eax; // remove the stack item that change didn't clean up
+#endif
     NORECURSE:
         popad;
         // Check for current_speedfactor
@@ -101,7 +105,7 @@ __declspec(naked) void changeOverrideNaked()
         mov     edi, dword ptr[ecx + 4]; // existing code immediately after jumping back
         cmp     edi, speedFactorKey;     
         je      OVERWRITESPEED;
-
+#ifdef PITCHSHIFT
         // Check for structurename
         cmp     edi, structureNameKey;
         je      CHECKPITCHSTRUCT;
@@ -119,16 +123,19 @@ __declspec(naked) void changeOverrideNaked()
         cmp     ecx, pitchKey;
         je      OVERWRITEPITCH;
         jmp     returnAddress;
-
+#else
+        jmp     returnAddress
+#endif
     OVERWRITESPEED:
         mov     edi, g_hackedSpeed;
         mov     dword ptr[ecx + 8], edi;
         jmp     returnAddress;
-
+#ifdef PITCHSHIFT
     OVERWRITEPITCH:
         mov     ecx, g_hackedPitch;
         mov     dword ptr[edi + 8], ecx;
         jmp     returnAddress;
+#endif
     }
 }
 
@@ -213,8 +220,10 @@ void ApplyHack()
 {
     // set up pointers within the changeX structs
     changeSpeedStruct[1] = (uint32_t) &changeSpeedStruct[2];
+#ifdef PITCHSHIFT
     changePitchStruct[1] = (uint32_t) &changePitchStruct[2];
     changePitchStruct[5] = (uint32_t) &changePitchStruct[6];
+#endif
 
     g_patcher.WriteJmp(changeDetour, &changeOverrideNaked);
     g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
