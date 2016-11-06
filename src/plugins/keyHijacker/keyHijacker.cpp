@@ -12,9 +12,9 @@
 static const LPVOID changeDetour = (LPVOID)0x00538EF0;
 static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
 static uint32_t changeSpeedStruct[] = { 0x00010000, 0xCDCDCDCD,
-	0x00000500, 0x16D91BC1, 0x3F800000, 0x00000000 };
+    0x00000500, 0x16D91BC1, 0x3F800000, 0x00000000 };
 static uint32_t changePitchStruct[] = { 0x00010000, 0xCDCDCDCD,
-	0x00001B00, 0xFD2C9E38, 0x3370A847, 0xCDCDCDCD,
+    0x00001B00, 0xFD2C9E38, 0x3370A847, 0xCDCDCDCD,
     0x00000500, 0xD8604126, 0x3F800000, 0x00000000 };
 
 static float g_hackedSpeed = 1.0f;
@@ -71,31 +71,31 @@ __declspec(naked) void changeOverrideNaked()
 
     __asm
     {
-	CHANGE:
+    CHANGE:
         // Copied start of "change"
-		sub     esp, 1Ch
-		push    ebp;
+        sub     esp, 1Ch
+        push    ebp;
         mov     ebp, [esp + 36]; // aList
         push    esi;
         push    edi;
 
-		// If the hacked values need to be changed, call change recursively to set them
-		pushad;
-		mov		eax, g_speedUpdated;
-		test	eax, eax;
-		jz		NORECURSE;
-		lea     eax, g_speedUpdated;
-		mov     [eax], 0;
-		lea     eax, changeSpeedStruct;
-		push    eax;
-		call    CHANGE;
-		pop     eax; // remove the stack item that change didn't clean up
-		lea     eax, changePitchStruct;
-		push    eax;
-		call    CHANGE;
-		pop     eax; // remove the stack item that change didn't clean up
-	NORECURSE:
-		popad;
+        // If the hacked values need to be changed, call change recursively to set them
+        pushad;
+        mov     eax, g_speedUpdated;
+        test    eax, eax;
+        jz      NORECURSE;
+        lea     eax, g_speedUpdated;
+        mov     [eax], 0;
+        lea     eax, changeSpeedStruct;
+        push    eax;
+        call    CHANGE;
+        pop     eax; // remove the stack item that change didn't clean up
+        lea     eax, changePitchStruct;
+        push    eax;
+        call    CHANGE;
+        pop     eax; // remove the stack item that change didn't clean up
+    NORECURSE:
+        popad;
         // Check for current_speedfactor
         mov     ecx, dword ptr[ebp + 4]; // Using edi and ecx because they are overwritten by
         mov     edi, dword ptr[ecx + 4]; // existing code immediately after jumping back
@@ -140,8 +140,8 @@ void applyNewSpeed(int32_t newSpeed)
         return;
     g_hackedSpeed = (float)(newSpeed / 100.0f);
     g_hackedPitch = 1.0f / g_hackedSpeed;
-	
-	g_speedUpdated = 1;
+    
+    g_speedUpdated = 1;
 }
 
 void resetKeys()
@@ -211,10 +211,10 @@ _declspec(naked) void checkKeysNaked()
 
 void ApplyHack()
 {
-	// set up pointers within the changeX structs
-	changeSpeedStruct[1] = (uint32_t) &changeSpeedStruct[2];
-	changePitchStruct[1] = (uint32_t) &changePitchStruct[2];
-	changePitchStruct[5] = (uint32_t) &changePitchStruct[6];
+    // set up pointers within the changeX structs
+    changeSpeedStruct[1] = (uint32_t) &changeSpeedStruct[2];
+    changePitchStruct[1] = (uint32_t) &changePitchStruct[2];
+    changePitchStruct[5] = (uint32_t) &changePitchStruct[6];
 
     g_patcher.WriteJmp(changeDetour, &changeOverrideNaked);
     g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
