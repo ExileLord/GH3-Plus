@@ -59,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GH3P_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Dan\Documents\Visual Studio 2013\Projects\GH3Hack\src\gh3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,6 +81,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GH3P_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,18 +92,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\gh3\QbArray.cpp" />
+    <ClCompile Include="..\gh3\QbKey.cpp" />
+    <ClCompile Include="..\gh3\QbMap.cpp" />
+    <ClCompile Include="..\gh3\QbStruct.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Patcher.cpp" />
-    <ClCompile Include="QBKey.cpp" />
     <ClCompile Include="ScopedUnprotect.cpp" />
     <ClCompile Include="PatchManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\gh3\QbArray.h" />
+    <ClInclude Include="..\gh3\QbKey.h" />
+    <ClInclude Include="..\gh3\QbMap.h" />
+    <ClInclude Include="..\gh3\QbStruct.h" />
+    <ClInclude Include="..\gh3\QbValueType.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="GH3Plus.h" />
     <ClInclude Include="Patcher.h" />
-    <ClInclude Include="QBKey.h" />
     <ClInclude Include="ScopedUnprotect.h" />
     <ClInclude Include="PatchManager.h" />
   </ItemGroup>

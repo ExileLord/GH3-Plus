@@ -94,7 +94,7 @@ int __stdcall textureManipulator(uint32_t key)
 
 	std::cout << key << "\n";
 
-	return		0x1FB75CA1; //lightning
+	return		0x58C6A27F;// 0x1FB75CA1; //lightning
 }
 
 

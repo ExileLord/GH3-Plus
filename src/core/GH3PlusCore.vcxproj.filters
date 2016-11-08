@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\GH3">
+      <UniqueIdentifier>{68f1dbba-d57e-4edb-9759-6d0ffb7f7336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GH3">
+      <UniqueIdentifier>{5985b1a0-e80c-49fc-b255-8331b9029133}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -30,8 +36,17 @@
     <ClCompile Include="ScopedUnprotect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QBKey.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\gh3\QbArray.cpp">
+      <Filter>Source Files\GH3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gh3\QbStruct.cpp">
+      <Filter>Source Files\GH3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gh3\QbKey.cpp">
+      <Filter>Source Files\GH3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gh3\QbMap.cpp">
+      <Filter>Source Files\GH3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,11 +62,23 @@
     <ClInclude Include="ScopedUnprotect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QBKey.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GH3Plus.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbArray.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbStruct.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbValueType.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbMap.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbKey.h">
+      <Filter>Header Files\GH3</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

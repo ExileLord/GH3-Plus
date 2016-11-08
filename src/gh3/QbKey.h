@@ -1,15 +1,15 @@
 #pragma once
-#include "GH3Plus.h"
+#include "core\GH3Plus.h"
 #include <stdint.h>
 
-namespace GH3P
+namespace GH3
 {
-	/// A crc32 hash that is often used as a key in the guitar hero engine.
+	/// A crc32 hash that is often used as a key in the Guitar Hero engine.
 	struct GH3P_API QbKey final
 	{
 	private:
 		/// The internal representation of the QbKey.
-		uint32_t _key;
+		uint32_t m_key;
 
 	public:
 		/// Initialized a QbKey with a value of 0
@@ -22,7 +22,7 @@ namespace GH3P
 		QbKey(const char *);
 
 		/// Allow integer conversion
-		inline operator uint32_t() const { return _key; }
+		inline operator uint32_t() const { return m_key; }
 
 
 		QbKey& operator=(const uint32_t);
