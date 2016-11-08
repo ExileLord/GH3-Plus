@@ -2,7 +2,7 @@
 #include "gh3\GH3Keys.h"
 #include "gh3\GH3GlobalAddresses.h"
 #include "tapHopoChord.h"
-#include "core\QBKey.h"
+#include "gh3\QBKey.h"
 
 #define ArrayLength(x) (sizeof(x)/sizeof(*(x)))
 

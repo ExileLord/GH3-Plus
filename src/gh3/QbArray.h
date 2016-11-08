@@ -23,10 +23,10 @@ namespace GH3
 		void Set(int index, uint32_t value);
 		uint32_t Get(int index);
 
-		QbValueType Type();
+		
 		void SetType(QbValueType type);
-
-		QbValueType Length();
+		inline QbValueType Type() { return m_type;}
+		inline uint32_t Length() { return m_size;}
 	};
 
 }

@@ -48,15 +48,9 @@ bool IsSingleNote(FretMask fretMask)
 
 FretMask __fastcall GetFretmaskFromTrackArray(GH3::QbArray *trackArray, int currentNote)
 {
-	int size; 
-	int *noteTrack; 
-	uint32_t result; 
-	int realFretMask;
-
-	size = trackArray->Length;
-	noteTrack = trackArray->A;                  
-												  
-	result = 0;             
+	int size = trackArray->Length();
+	uint32_t result = 0; 
+	int realFretMask;                       
 
 	realFretMask = trackArray->Get(currentNote + 2);
 
@@ -195,7 +189,7 @@ __declspec(naked) void loadTappingFlagNaked()
 
 
 
-void __stdcall LoadOpenHopoTappingBits(GH3::QbArray *noteQbArr, QbArray *placedNotesQbArr, int currentNote, int noteIndex, float hammerOnTolerance)
+void __stdcall LoadOpenHopoTappingBits(GH3::QbArray *noteQbArr, GH3::QbArray *placedNotesQbArr, int currentNote, int noteIndex, float hammerOnTolerance)
 {
 	//noteQbArr has a repeating sequence of [offset in ms, length in ms, fretmask]
 	//placedNotesQbArr is an array of QbArrays
@@ -207,20 +201,20 @@ void __stdcall LoadOpenHopoTappingBits(GH3::QbArray *noteQbArr, QbArray *placedN
 	bool hopoFlip = false;
 	bool tappingFlag = false;
 
-	QbArray *prevNoteQbArray;
+	GH3::QbArray *prevNoteQbArray;
 
 	FretMask fretMask;
 	FretMask prevFretMask;
 	FretMask currentFretMask;
 
-	int noteQbArrSize = noteQbArr->size;
+	int noteQbArrSize = noteQbArr->Length();
 	int prevNoteTime;
 	int noteTime;
 
 	if (noteQbArrSize != 1)
 	{
-		sustainLength = noteQbArr->arr[currentNote + 1]; 
-		fretMask = static_cast<FretMask>(noteQbArr->arr[currentNote + 2]);
+		sustainLength = noteQbArr->Get(currentNote + 1); 
+		fretMask = static_cast<FretMask>(noteQbArr->Get(currentNote + 2));
 
 		if (sustainLength * (fretMask & QbFretMask::QbHopoflip) != 0)
 			hopoFlip = true;
@@ -233,23 +227,12 @@ void __stdcall LoadOpenHopoTappingBits(GH3::QbArray *noteQbArr, QbArray *placedN
 
 	if (noteIndex > 0)
 	{
-		if (placedNotesQbArr->size == 1)
-			prevNoteQbArray = reinterpret_cast<GH3::QbArray *>(placedNotesQbArr->arr);
-		else
-			prevNoteQbArray = reinterpret_cast<GH3::QbArray *>(placedNotesQbArr->arr[noteIndex - 1]);
-
+		prevNoteQbArray = reinterpret_cast<GH3::QbArray *>(placedNotesQbArr->Get(noteIndex - 1));
 		prevFretMask = GetFretmaskFromNoteQbArray(prevNoteQbArray);
 		currentFretMask = GetFretmaskFromTrackArray(noteQbArr, currentNote);
 
-		if (prevNoteQbArray->size == 1)
-			prevNoteTime = reinterpret_cast<int>(prevNoteQbArray->arr);
-		else
-			prevNoteTime = prevNoteQbArray->arr[0];
-
-		if (noteQbArr->size == 1)
-			noteTime = reinterpret_cast<int>(noteQbArr->arr);
-		else
-			noteTime = noteQbArr->arr[currentNote];
+		prevNoteTime = prevNoteQbArray->Get(0);
+		noteTime = noteQbArr->Get(currentNote);
 
 		if (hammerOnTolerance >= ((float)noteTime - (float)prevNoteTime)
 			&& IsSingleNote(currentFretMask)
@@ -299,22 +282,17 @@ void __declspec(naked) LoadOpenHopoTappingBitsNaked()
 
 int __fastcall CreateNoteWithOpenImpl(GH3::QbArray *noteArray, int noteIndex, int noteTime, int greenLength, int redLength, int yellowLength, int blueLength, int orangeLength, int hopoFlag, int nextNoteTime)
 {
-	QbArray *note;
+	GH3::QbArray *note = reinterpret_cast<GH3::QbArray *>(noteArray->Get(noteIndex));
 
-	if (noteArray->size == 1)
-		note = (QbArray *)noteArray->arr;
-	else
-		note = (QbArray *)noteArray->arr[noteIndex];// 
-													// 
-	note->SetValue(0, noteTime);
-	note->SetValue(1, greenLength);
-	note->SetValue(2, redLength);
-	note->SetValue(3, yellowLength);
-	note->SetValue(4, blueLength);
-	note->SetValue(5, orangeLength);
-	note->SetValue(6, hopoFlag);
-	note->SetValue(7, nextNoteTime);
-	note->SetValue(8, g_openLength);
+	note->Set(0, noteTime);
+	note->Set(1, greenLength);
+	note->Set(2, redLength);
+	note->Set(3, yellowLength);
+	note->Set(4, blueLength);
+	note->Set(5, orangeLength);
+	note->Set(6, hopoFlag);
+	note->Set(7, nextNoteTime);
+	note->Set(8, g_openLength);
 
 	return 1;
 }
@@ -329,14 +307,6 @@ int __declspec(naked) CreateNoteWithOpen()
 		jmp CreateNoteWithOpenImpl;
 	}
 }
-
-
-
-
-
-
-
-
 
 
 

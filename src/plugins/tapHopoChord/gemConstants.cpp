@@ -2,7 +2,6 @@
 #include "gh3\GH3Keys.h"
 #include "gh3\GH3GlobalAddresses.h"
 #include "tapHopoChord.h"
-#include "core\QBKey.h"
 
 float g_gemStartPosX[6] = { 0 };
 float g_gemStartPosY[6] = { 0 };
