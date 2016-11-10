@@ -5,6 +5,7 @@ namespace GH3
 
 	enum GH3P_API QbValueType : __int8
 	{
+		TypeUndefined = 0x0,
 		TypeInt = 0x1,
 		TypeFloat = 0x2,
 		TypeCString = 0x3,
@@ -19,10 +20,10 @@ namespace GH3
 		TypeQbKey = 0xD,
 		TypeUnk20 = 0x14,
 		TypeUnk21 = 0x15,
-		TypeUnk22 = 0x16,
-		TypeUnk23 = 0x17,
+		TypeBinaryTree1 = 0x16,
+		TypeBinaryTree2 = 0x17,
 		TypeStringPointer = 0x1A,
-		TypeDictionary = 0x1B,
+		TypeQbMap = 0x1B,
 		TypeQbKeyStringQs = 0x1C,
 	};
 

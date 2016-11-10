@@ -9,37 +9,28 @@ namespace GH3
 		__asm jmp function;
 	}
 
-
-
-	void QbArray::Set(int index, uint32_t value)
+	void QbArray::Clear()
 	{
-		int result;
-
-		if (m_size == 1)
-		{
-			m_arr = reinterpret_cast<uint32_t *>(value);
-		}
-		else
-		{
-			m_arr[index] = value;
-		}
+		SetType(QbValueType::TypeUndefined);
+		m_arr = nullptr;
+		m_length = 0;
+		unk1 = 0;
 	}
 
-
-
-	uint32_t QbArray::Get(int index)
+	uint32_t QbArray::operator[](int index) const
 	{
-		if (m_size != 1)
+		if (m_length != 1)
 			return m_arr[index];
 		else
 			return reinterpret_cast<uint32_t>(m_arr);
 	}
 
-
-
-	void QbArray::SetType(QbValueType type)
+	uint32_t & QbArray::operator[](int index)
 	{
-		m_type = type;
+		if (Length() == 1)
+			return reinterpret_cast<uint32_t &>(m_arr);
+		else
+			return m_arr[index];
 	}
 
 }

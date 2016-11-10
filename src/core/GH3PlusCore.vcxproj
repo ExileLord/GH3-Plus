@@ -92,6 +92,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\gh3\BinaryTree.cpp" />
+    <ClCompile Include="..\gh3\GlobalMap.cpp" />
     <ClCompile Include="..\gh3\QbArray.cpp" />
     <ClCompile Include="..\gh3\QbKey.cpp" />
     <ClCompile Include="..\gh3\QbMap.cpp" />
@@ -103,6 +105,8 @@
     <ClCompile Include="PatchManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\gh3\BinaryTree.h" />
+    <ClInclude Include="..\gh3\GlobalMap.h" />
     <ClInclude Include="..\gh3\QbArray.h" />
     <ClInclude Include="..\gh3\QbKey.h" />
     <ClInclude Include="..\gh3\QbMap.h" />

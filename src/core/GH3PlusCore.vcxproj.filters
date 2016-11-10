@@ -48,6 +48,12 @@
     <ClCompile Include="..\gh3\QbMap.cpp">
       <Filter>Source Files\GH3</Filter>
     </ClCompile>
+    <ClCompile Include="..\gh3\GlobalMap.cpp">
+      <Filter>Source Files\GH3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gh3\BinaryTree.cpp">
+      <Filter>Source Files\GH3</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.h">
@@ -78,6 +84,12 @@
       <Filter>Header Files\GH3</Filter>
     </ClInclude>
     <ClInclude Include="..\gh3\QbKey.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\GlobalMap.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\BinaryTree.h">
       <Filter>Header Files\GH3</Filter>
     </ClInclude>
   </ItemGroup>

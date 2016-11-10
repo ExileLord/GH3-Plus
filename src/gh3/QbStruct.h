@@ -25,36 +25,37 @@ namespace GH3
 		QTypeQbKey = 0x1A,
 		QTypeUnk20 = 0x28,
 		QTypeUnk21 = 0x2A,
-		QTypeUnk22 = 0x2C,
-		QTypeUnk23 = 0x2E,
+		QTypeBinaryTree1 = 0x2C,
+		QTypeBinaryTree2 = 0x2E,
 		QTypeStringPointer = 0x34,
 		QTypeDictionary = 0x36,
 	};
 
-	struct GH3P_API QbStructNode
-	{
-	private:
-		uint8_t unkFlag0;
-		QbNodeFlags flags;
-		uint16_t word2;
-		uint32_t key;
-		uint32_t value;
-		QbStructNode *next;
-
-	public:
-		
-	};
+	
 
 
 	struct GH3P_API QbStruct
 	{
+		struct QbStructNode
+		{
+			uint8_t unkFlag0;
+			QbNodeFlags flags;
+			uint16_t word2;
+			uint32_t key;
+			uint32_t value;
+			QbStructNode *next;
+
+			inline QbValueType Type() { return static_cast<QbValueType>(flags >> 1); }
+		};
+
 	private:
-		uint32_t unknown;
+		uint16_t unk0;
+		uint8_t unk2;
+		uint8_t unk3;
 		QbStructNode *first;
 
 	public:
-		bool GetTypedValue(QbKey qbKey, QbValueType valueType, uint32_t *value);
-		char method_587A50(QbKey aKey, QbValueType valueType, uint32_t *outValue, int a5);
+		bool GetTypedValue(QbKey qbKey, QbValueType valueType, void *outValue);
 	};
 
 }

@@ -14,30 +14,33 @@ namespace GH3
 	{
 	private:
 
-		struct __declspec(align(4)) QbMapNode
+		struct QbMapNode
 		{
 			QbKey key;
-			QbStructNode *node;
+			uint32_t value;
 			QbMapNode *nextNode;
 		};
 
 		uint32_t	m_size;
 		QbMapNode	*m_nodes;
 		QbNodeFlags	m_typeFlags;
-		uint32_t	dwordC;
-		uint32_t	dword10;
-		uint8_t		byte14;
+		uint32_t	unkC;
+		uint32_t	unk10;
+		uint8_t		unk14;
 		uint8_t		m_boolFlag;
 		uint8_t		m_keepAliveFlag;
-		uint8_t		m_byte17;
+		uint8_t		unk17;
 
 	public:
-		QbStructNode * GetNode(QbKey key);
+		uint32_t operator[] (QbKey key) const;
+		uint32_t & operator[] (QbKey key);
 
-		inline uint32_t Size() { return m_size; }
-		inline QbValueType Type() { return static_cast<QbValueType>(m_typeFlags >> 1); }
-		inline uint32_t IndexMask() { return ( (1 << m_size) - 1); }
+		inline uint32_t Get(QbKey key) const { return (*this)[key]; };
+		inline void Insert(QbKey key, uint32_t value) { (*this)[key] = value; };
 
+		inline uint32_t Size() const { return m_size; }
+		inline QbValueType Type() const { return static_cast<QbValueType>(m_typeFlags >> 1); }
+		inline uint32_t IndexMask() const { return ( (1 << m_size) - 1); }
 	};
 
 }
