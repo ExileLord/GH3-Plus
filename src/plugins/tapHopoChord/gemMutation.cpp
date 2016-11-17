@@ -25,12 +25,12 @@ _declspec(naked) void gemMutationSPActivationBranchNaked()
 	{
 		// Previous comparison was cmp		[esp + 14h], 0
 		jz		NO_HAMMER;
-		cmp[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
+		cmp		[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
 		jz		HAMMER;
 
 		//Tap Notes
 		mov		eax, SP_TAP_NOTE_GEM_INDEX;
-		mov     eax, [ADDR_gemMatBattle2 + eax * 4]; // g_gemMatHammerSp2[eax * 4]
+		mov     eax, [g_gemMatBattle + eax * 4]; // g_gemMatHammerSp2[eax * 4]
 		mov     ecx, [ADDR_someStruct + esi * 4];	//this
 		push    eax;	//textureKey
 		jmp     gemMutationSPActivationBranch_Tap;
@@ -57,18 +57,19 @@ _declspec(naked) void gemMutationSPDeactivationBranchNaked()
 	{
 		// Previous comparison was cmp		[esp + 14h], 0
 		jz		NO_HAMMER;
-		cmp[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
+		cmp		[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
 		jz		HAMMER;
 
-		//Tap Notes
+	//TAP:
 		mov     eax, KEY_BATTLE_STAR_MATERIAL;
 		jmp     gemMutationSPDeactivationBranch_HammerOrTap;
 
 	NO_HAMMER:
 		jmp		gemMutationSPDeactivationBranch_NoHammer;
+
 	HAMMER:
-		mov     eax, KEY_GEM_HAMMER_MATERIAL
-			jmp		gemMutationSPDeactivationBranch_HammerOrTap;
+		mov     eax, KEY_GEM_HAMMER_MATERIAL;
+		jmp		gemMutationSPDeactivationBranch_HammerOrTap;
 	}
 }
 
@@ -83,7 +84,7 @@ _declspec(naked) void gemMutationPhraseMissBranchNaked()
 	{
 		// Previous comparison was cmp		[esp + 14h], 0
 		jz		NO_HAMMER;
-		cmp[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
+		cmp		[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
 		jz		HAMMER;
 
 		//Tap Notes
@@ -141,12 +142,12 @@ _declspec(naked) void gemMutationStarOverlapBranchNaked()
 	__asm
 	{
 		// Previous comparison was cmp		[esp + 14h], 0
-		cmp[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
+		cmp		[esp + 14h], 1;  //[esp + 0F4h + hammerOn]
 		jz		HAMMER;
 
 		//Tap Notes
 		mov		eax, SP_TAP_NOTE_GEM_INDEX;
-		mov     eax, [ADDR_gemMatBattle2 + eax * 4]; // g_gemMatHammerSp2[eax * 4]
+		mov     eax, [g_gemMatBattle + eax * 4]; // g_gemMatHammerSp2[eax * 4]
 
 	HAMMER:
 		jmp		gemMutationStarOverlapBranch_Exit;

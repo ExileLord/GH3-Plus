@@ -12,7 +12,9 @@ void ApplyHack()
 		!TryApplyGemMutationPatches() ||
 		!TryApplyNoteLoadingPatches() ||
 		!TryApplyNoteLogicPatches() ||
-		!TryApplyGlobalArrayPatches())
+		!TryApplyGlobalArrayPatches() ||
+		!TryApplyGemConstantsPatches() ||
+		!TryApplyTextureTakeoverPatches() )
 	{
 		g_patcher.RemoveAllChanges();
 	}

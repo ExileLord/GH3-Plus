@@ -36,7 +36,7 @@ namespace GH3
 		uint32_t & operator[] (QbKey key);
 
 		inline uint32_t Get(QbKey key) const { return (*this)[key]; };
-		inline void Insert(QbKey key, uint32_t value) { (*this)[key] = value; };
+		inline void Insert(QbKey key, uint32_t value) { this->operator[](key) = value; };
 
 		inline uint32_t Size() const { return m_size; }
 		inline QbValueType Type() const { return static_cast<QbValueType>(m_typeFlags >> 1); }

@@ -39,9 +39,11 @@ enum HopoFlag : uint32_t
 
 struct Note
 {
-	uint32_t vTable;
-	uint32_t fret[5];
+	uint32_t noteTime;
+	uint32_t fretLength[5];
 	HopoFlag hopoFlag;
+	uint32_t nextNoteTime;
+	uint32_t noteLength;
 };
 
 
@@ -67,9 +69,33 @@ enum QbFretMask : uint32_t
 	QbOpen = 0x80
 };
 
+bool __fastcall IsSingleNote(FretMask fretMask);
+FretMask __fastcall GetFretmaskFromTrackArray(GH3::QbArray *trackArray, int currentNote);
+FretMask __fastcall GetFretmaskFromNoteQbArray(GH3::QbArray *noteArr);
+
+
+constexpr GH3::QbKey RawOpenTextureKey =				"images\\highway\\gem2d_open.img";
+constexpr GH3::QbKey RawOpenHammerTextureKey =			"images\\highway\\gem2d_open_hammer.img";
+constexpr GH3::QbKey RawOpenStarTextureKey =			"images\\highway\\star2d_open.img";
+constexpr GH3::QbKey RawOpenStarHammerTextureKey =		"images\\highway\\star2d_open_hammer.img";
+constexpr GH3::QbKey RawOpenStarpowerTextureKey =		"images\\highway\\gem2d_open_starpower.img";
+constexpr GH3::QbKey RawOpenStarpowerHammerTextureKey = "images\\highway\\gem2d_open_hammer_starpower.img";
+
+constexpr GH3::QbKey OpenTextureKey =					"sys_gem2d_open_sys_gem2d_open";
+constexpr GH3::QbKey OpenHammerTextureKey =				"sys_gem2d_open_hammer_sys_gem2d_open_hammer";
+constexpr GH3::QbKey OpenStarTextureKey =				"sys_star2d_open_sys_gem2d_open";
+constexpr GH3::QbKey OpenStarHammerTextureKey =			"sys_star2d_open_hammer_sys_gem2d_open_hammer";
+constexpr GH3::QbKey OpenStarpowerTextureKey =			"sys_gem2d_open_starpower_sys_gem2d_open_starpower";
+constexpr GH3::QbKey OpenStarpowerHammerTextureKey =	"sys_gem2d_open_starpower_hammer_sys_gem2d_open_starpower_hammer";
+
+constexpr GH3::QbKey YellowTextureKey =					"sys_gem2d_yellow_sys_gem2d_yellow";
+constexpr GH3::QbKey YellowHammerTextureKey =			"sys_gem2d_yellow_hammer_sys_gem2d_yellow_hammer";
+constexpr GH3::QbKey YellowStarTextureKey =				"sys_star2d_yellow_sys_star2d_yellow";
+constexpr GH3::QbKey YellowStarHammerTextureKey =		"sys_star2d_yellow_hammer_sys_star2d_yellow_hammer";
+constexpr GH3::QbKey YellowStarpowerTextureKey =		"sys_gem2d_starpower_sys_gem2d_starpower";
+constexpr GH3::QbKey YellowStarpowerHammerTextureKey =	"sys_gem2d_starpower_hammer_sys_gem2d_starpower_hammer";
+
 extern GH3P::Patcher g_patcher;
-
-
 
 extern float g_gemStartPosX[6];
 extern float g_gemStartPosY[6];
@@ -106,6 +132,8 @@ bool TryApplyNoteLogicPatches();
 bool TryApplyNoteLoadingPatches();
 bool TryApplyGemLoadingPatches();
 bool TryApplyGemMutationPatches();
+bool TryApplyGemConstantsPatches();
 bool TryApplyGlobalArrayPatches();
+bool TryApplyTextureTakeoverPatches();
 
 FretMask getHighFret(FretMask fretMask);

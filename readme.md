@@ -6,7 +6,7 @@ GH3+ is a work in progress plugin system for Guitar Hero III written in C++.
 Latest release
 --------------
 
-The most recent release is v0.5. This release contains:
+The most recent release is v0.6. This release contains:
 - core
 - AlwaysDoubleNotes
 - ForceStrumNotes
@@ -21,13 +21,5 @@ The most recent release is v0.5. This release contains:
 - WhammyFix
 
 Fixes from the latest version include:
-- Statically linked DLLs in release mode by default. This should fix
-- Fixed HOPO bug in MirrorMode plugin. Rewritten from scratch.
-- Fixed HOPO bug in DoubleNotes plugin. Proper interaction with MirrorMode.
-- Fixed bug where TiltFix didn't work if built in release mode
-
-The largest changes from the latest version are:
-- Removed std collection methods from the public GH3P APIs to prevent potential problems
-- Fixed all warnings
-- Renamed import/export macro to `GH3P_API` and moved to [GH3Plus.h].
-- Updates to QbKey
+- Major updates to the GH3+ API include support for most of GH3's native "Qb" structures/classes.
+- Open notes

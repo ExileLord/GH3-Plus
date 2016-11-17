@@ -92,5 +92,11 @@
     <ClInclude Include="..\gh3\BinaryTree.h">
       <Filter>Header Files\GH3</Filter>
     </ClInclude>
+    <ClInclude Include="..\gh3\TextureMetadata.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbImage.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

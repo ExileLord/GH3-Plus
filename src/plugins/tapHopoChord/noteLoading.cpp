@@ -36,7 +36,7 @@ uint32_t g_hopoFlag = 0;
 
 
 
-bool IsSingleNote(FretMask fretMask)
+bool __fastcall IsSingleNote(FretMask fretMask)
 {
 	return (fretMask == FretMask::GREEN ||
 		fretMask == FretMask::RED ||
@@ -77,60 +77,27 @@ FretMask __fastcall GetFretmaskFromTrackArray(GH3::QbArray *trackArray, int curr
 
 FretMask __fastcall GetFretmaskFromNoteQbArray(GH3::QbArray *noteArr)
 {
-	
-
-	//if (size != 1)
-	//	fret = noteArr->arr[8];
-	//if (fret > 0)
-	//	return FretMask::OPEN;
-
 	if (noteArr->Get(8))
 		return FretMask::OPEN;
 
 	uint32_t fretMask = 0;
 		
 	if (noteArr->Get(1))
-		return FretMask::GREEN;
+		fretMask |= FretMask::GREEN;
 
 	if (noteArr->Get(2))
-		return FretMask::RED;
+		fretMask |= FretMask::RED;
 
 	if (noteArr->Get(3))
-		return FretMask::YELLOW;
+		fretMask |= FretMask::YELLOW;
 
 	if (noteArr->Get(4))
-		return FretMask::BLUE;
+		fretMask |= FretMask::BLUE;
 
 	if (noteArr->Get(5))
-		return FretMask::ORANGE;
+		fretMask |= FretMask::ORANGE;
 
-
-	//if (size != 1)
-	//	fret = noteArr->arr[1];
-	//if (fret > 0)
-	//	fretMask |= FretMask::GREEN;
-	//
-	//if (size != 1)
-	//	fret = noteArr->arr[2];
-	//if (fret > 0)
-	//	fretMask |= FretMask::RED;
-	//
-	//if (size != 1)
-	//	fret = noteArr->arr[3];
-	//if (fret > 0)
-	//	fretMask |= FretMask::YELLOW;
-	//
-	//if (size != 1)
-	//	fret = noteArr->arr[4];
-	//if (fret > 0)
-	//	fretMask |= FretMask::BLUE;
-	//
-	//if (size != 1)
-	//	fret = noteArr->arr[5];
-	//if (fret > 0)
-	//	fretMask |= FretMask::ORANGE;
-
-	return (FretMask)fretMask;
+	return static_cast<FretMask>(fretMask);
 }
 
 

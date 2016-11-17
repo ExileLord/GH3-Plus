@@ -33,7 +33,7 @@ namespace GH3
 		static bool GetTypedValue(QbKey key, QbValueType type, void *pValue);
 		static bool GetValue(QbKey key, void *pValue, QbValueType *pType);
 
-		static uint32_t Insert(uint32_t key, QbValueType type, uint32_t value);
+		static uint32_t Insert(uint32_t key, QbValueType type, uint32_t value); //TODO
 
 	};
 

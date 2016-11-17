@@ -108,10 +108,12 @@
     <ClInclude Include="..\gh3\BinaryTree.h" />
     <ClInclude Include="..\gh3\GlobalMap.h" />
     <ClInclude Include="..\gh3\QbArray.h" />
+    <ClInclude Include="..\gh3\QbImage.h" />
     <ClInclude Include="..\gh3\QbKey.h" />
     <ClInclude Include="..\gh3\QbMap.h" />
     <ClInclude Include="..\gh3\QbStruct.h" />
     <ClInclude Include="..\gh3\QbValueType.h" />
+    <ClInclude Include="..\gh3\TextureMetadata.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="GH3Plus.h" />
     <ClInclude Include="Patcher.h" />
