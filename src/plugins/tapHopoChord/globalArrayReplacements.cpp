@@ -10,7 +10,6 @@
 uint32_t g_gemColorKey[] = { KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, KEY_YELLOW };
 void * g_gemColorKeyReferences[] =
 {
-
 	(void *)(0x0041B956 + 2),
 	(void *)(0x0041E2F0 + 2),
 	(void *)(0x00424ECB + 2),
@@ -28,7 +27,7 @@ uint32_t g_HitNoteKey[] = { KEY_HITNOTE_GREEN, KEY_HITNOTE_RED, KEY_HITNOTE_YELL
 void * g_HitNoteKeyReference = (void *)(0x00435553 + 3);
 
 //.data:00957BA4k
-uint32_t g_brokeStringKey[] = { KEY_BROKEN_STRING_GREEN, KEY_BROKEN_STRING_RED, KEY_BROKEN_STRING_YELLOW, KEY_BROKEN_STRING_BLUE, KEY_BROKEN_STRING_ORANGE, KEY_YELLOW };
+uint32_t g_brokeStringKey[] = { KEY_BROKEN_STRING_GREEN, KEY_BROKEN_STRING_RED, KEY_BROKEN_STRING_YELLOW, KEY_BROKEN_STRING_BLUE, KEY_BROKEN_STRING_ORANGE, KEY_BROKEN_STRING_YELLOW };
 void * g_brokeStringKeyReference = (void *)(0x00429C64 + 3);
 
 //"Button" arrays

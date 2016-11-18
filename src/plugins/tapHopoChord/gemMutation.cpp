@@ -74,12 +74,11 @@ _declspec(naked) void gemMutationSPDeactivationBranchNaked()
 }
 
 static void * const gemMutationPhraseMissBranch = (void *)0x00427B86; //redirect to gemMutationPhraseMissBranchNaked
-static void * const gemMutationPhraseMissBranch_NoHammer = (void *)0x00427BA0;
-static void * const gemMutationPhraseMissBranch_HammerAndTap = (void *)0x00427B8D;
-
 // Fixes tap note mutation upon missing SP phrase
 _declspec(naked) void gemMutationPhraseMissBranchNaked()
 {
+	static const void * const gemMutationPhraseMissBranch_NoHammer = (void *)0x00427BA0;
+	static const void * const gemMutationPhraseMissBranch_HammerAndTap = (void *)0x00427B8D;
 	__asm
 	{
 		// Previous comparison was cmp		[esp + 14h], 0

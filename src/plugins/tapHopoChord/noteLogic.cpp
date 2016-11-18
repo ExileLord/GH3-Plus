@@ -442,7 +442,12 @@ uint32_t getAnchoredMask(uint32_t fretMask)
 // ~~~~~~~~~~ //
 ////////////////
 
-
+void __stdcall noteHitEnd(uint32_t pIdx)
+{
+	g_lastHit[pIdx] = g_pressedFrets[pIdx];
+	g_canTap[pIdx] = 0;
+	g_canTapLow[pIdx] = 0;
+}
 
 __declspec(naked) void noteHitEndNaked()
 {
@@ -466,18 +471,77 @@ __declspec(naked) void noteHitEndNaked()
 	}
 }
 
-void __stdcall noteHitEnd(uint32_t pIdx)
+
+
+
+
+//TryHitNote updates
+
+//If an open note is being hit, make the pattern 0x33333 so that all the frets pop up!
+//This will also make it count them as 250 points so that needs to be fixed elsewhere
+static void * const noteHitPatternDetour = (void *)0x00430985;
+void __declspec(naked) noteHitPatternFixNaked()
 {
-	g_lastHit[pIdx] = g_pressedFrets[pIdx];
-	g_canTap[pIdx] = 0;
-	g_canTapLow[pIdx] = 0;
+	static const void * const returnAddress = (void *)0x0043098E;
+	__asm
+	{
+		mov     edi, [esp + 5Ch];
+		cmp     edi, OPEN;
+		jnz		DONE;
+
+		mov     edi, (OPEN | GREEN | RED | YELLOW | BLUE | ORANGE);
+		mov		[esp + 5Ch], edi;
+		
+	DONE:
+		//Displaced code
+		mov eax, KEY_PATTERN;
+		jmp returnAddress;
+	}
 }
+
+uint32_t __fastcall updateScoreFix(uint32_t fretmask)
+{
+	int count = 0;
+	if (fretmask & FretMask::OPEN) //Ignore other frets if it's an open note otherwise you could have open notes worth more than 50 points
+		return 1;
+
+	if (fretmask & FretMask::GREEN)
+		++count;
+	if (fretmask & FretMask::RED)
+		++count;
+	if (fretmask & FretMask::YELLOW)
+		++count;
+	if (fretmask & FretMask::BLUE)
+		++count;
+	if (fretmask & FretMask::ORANGE)
+		++count;
+
+	return count;
+}
+
+static void * const updateScoreDetour = (void *)0x00423F2F;
+void __declspec(naked) updateScoreFixNaked()
+{
+	static const void * const returnAddress = (void *)0x00423F68;
+	__asm
+	{
+		mov		ecx, eax;		//fretmask (fastcall)
+		call	updateScoreFix;
+		mov 	[esp + 8], eax;
+		jmp		returnAddress;
+	}
+}
+
+
+
+
+
 
 bool TryApplyNoteLogicPatches()
 {
 	uint8_t *jnz_to_CHORD_CHECK_FAILED = (uint8_t *)(0x00431E75); // test before was cmp hopo vs 1
 
-	return 
+	return
 		(
 			g_patcher.WriteJmp(guitarInputLogicDetour1, &loadLastHitNaked) &&
 			g_patcher.WriteJmp(guitarInputLogicDetour2, &setCanTapStateNaked) &&
@@ -486,7 +550,12 @@ bool TryApplyNoteLogicPatches()
 			g_patcher.WriteJmp(noteHitEndDetour2, &noteHitEndNaked) &&
 			g_patcher.WriteJmp(chordBranchFixDetour, &chordBranchFixNaked) &&
 			g_patcher.WriteJmp(noteHitCheckDetour, &fixNoteHitCheckNaked) &&
-			g_patcher.WriteJmp(heldFretsLoadingDetour, &fixHeldFretsLoading)
+			g_patcher.WriteJmp(heldFretsLoadingDetour, &fixHeldFretsLoading) &&
+
+			//TryHitNote Updates
+			g_patcher.WriteInt8((void *)(0x00430D33 + 2), (6 * 4)) && //Loop on 6 frets instead of 5
+			g_patcher.WriteJmp(noteHitPatternDetour, &noteHitPatternFixNaked) &&
+			g_patcher.WriteJmp(updateScoreDetour, &updateScoreFixNaked)
 		);
 
 
