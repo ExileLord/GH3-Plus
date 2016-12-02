@@ -31,6 +31,12 @@ namespace GH3P
 		/// Writes an unconditional jump instruction at each address to the given destination. Five bytes will be overwritten at each address.
 		bool WriteJmpMulti(void **addresses, uint32_t addressCount, void *jumpDestination);
 
+		/// Writes a call instruction at the given address to the given destination. Five bytes will be overwritten.
+		bool WriteCall(void *addr, void *calleeAddress);
+
+		/// Writes a call instruction at each address to the given destination. Five bytes will be overwritten at each address.
+		bool WriteCallMulti(void **addresses, uint32_t addressCount, void *calleeAddress);
+
 		/// Writes an 8 bit integer at the given address. One byte will be overwritten.
 		bool WriteInt8(void *addr, uint8_t value);
 
