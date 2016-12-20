@@ -7,7 +7,7 @@
 #define ArrayLength(x) (sizeof(x)/sizeof(*(x)))
 
 //.data:00957B90 
-uint32_t g_gemColorKey[] = { KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, KEY_YELLOW };
+uint32_t g_gemColorKey[] = { KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, GH3::QbKey("open") };
 void * g_gemColorKeyReferences[] =
 {
 	(void *)(0x0041B956 + 2),
@@ -197,8 +197,6 @@ void * g_fretMaskReferences[] =
 	(void *)(0x00424E84 + 2),
 	(void *)(0x00430AA4 + 2),
 };
-
-
 
 
 

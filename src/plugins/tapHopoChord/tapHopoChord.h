@@ -73,7 +73,6 @@ bool __fastcall IsSingleNote(FretMask fretMask);
 FretMask __fastcall GetFretmaskFromTrackArray(GH3::QbArray *trackArray, int currentNote);
 FretMask __fastcall GetFretmaskFromNoteQbArray(GH3::QbArray *noteArr);
 
-
 constexpr GH3::QbKey RawOpenTextureKey =				"images\\highway\\gem2d_open.img";
 constexpr GH3::QbKey RawOpenHammerTextureKey =			"images\\highway\\gem2d_open_hammer.img";
 constexpr GH3::QbKey RawOpenStarTextureKey =			"images\\highway\\star2d_open.img";

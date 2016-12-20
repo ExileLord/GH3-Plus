@@ -533,6 +533,34 @@ void __declspec(naked) updateScoreFixNaked()
 }
 
 
+//We have to make update the tryhitnote logic to not load information for the open gems since there's no hitbar info associated with it.
+static int __fastcall loadGemTryHitNoteFix(GH3::QbArray *arr, int fretIndex)
+{
+	//If the note is an open note pretend it isn't and return 0.
+	fretIndex /= 4;
+	if (fretIndex == 5)
+		return 0;
+
+	return arr->Get(fretIndex + 1);
+
+}
+
+static void * const loadGemTryHitNoteDetour = (void *)0x00430AD3;
+void __declspec(naked) loadGemTryHitNoteFixNaked()
+{
+	static const void * const returnAddress = (void *)0x00430AEC;
+	__asm
+	{
+		mov	ecx, [esp + 28h];
+		add esp, 8; //Fix stack from previous cdecl call
+		mov edx, ebx;
+		call loadGemTryHitNoteFix;
+		jmp returnAddress;
+	}
+}
+
+
+
 
 
 
@@ -555,7 +583,8 @@ bool TryApplyNoteLogicPatches()
 			//TryHitNote Updates
 			g_patcher.WriteInt8((void *)(0x00430D33 + 2), (6 * 4)) && //Loop on 6 frets instead of 5
 			g_patcher.WriteJmp(noteHitPatternDetour, &noteHitPatternFixNaked) &&
-			g_patcher.WriteJmp(updateScoreDetour, &updateScoreFixNaked)
+			g_patcher.WriteJmp(updateScoreDetour, &updateScoreFixNaked) &&
+			g_patcher.WriteJmp(loadGemTryHitNoteDetour, &loadGemTryHitNoteFixNaked)
 		);
 
 
