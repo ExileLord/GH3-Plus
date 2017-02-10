@@ -244,8 +244,11 @@ void ApplyHack()
     //gh3p::WriteJmp(GetDWord, &storeLastKeyNaked);
     //gh3p::WriteJmp(GetFloatDetour, &storeFloatKeyNaked);
     //gh3p::WriteJmp(HijackGetFloatDetour, &hijackGetFloatNaked);
-    g_patcher.WriteJmp(SetCase2Detour, &hijackCase2Naked);
-    g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
+	if (!g_patcher.WriteJmp(SetCase2Detour, &hijackCase2Naked) ||
+		g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked))
+	{
+		g_patcher.RemoveAllChanges();
+	}
 
     
 }

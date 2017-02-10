@@ -82,5 +82,8 @@ bool __stdcall tiltFix(float tilt)
 
 void ApplyHack()
 {
-    g_patcher.WriteJmp(starPowerCheckDetour, tiltFixNaked);
+	if (!g_patcher.WriteJmp(starPowerCheckDetour, tiltFixNaked))
+	{
+		g_patcher.RemoveAllChanges();
+	}
 }

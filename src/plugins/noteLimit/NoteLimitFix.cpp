@@ -39,10 +39,13 @@ void FixNoteLimit()
 	g_patcher.WriteInt32(SIZEOP_NOTE_ALLOCATION, MAX_NOTES);
 
 	// Fix static references
-	g_patcher.WriteInt32(ADDROP_SUSTAINARRAY_1, reinterpret_cast<uint32_t>(fixedSustainArray));
-	g_patcher.WriteInt32(ADDROP_SUSTAINARRAY_2, reinterpret_cast<uint32_t>(fixedSustainArray));
-	g_patcher.WriteInt32(ADDROP_SUSTAINARRAY_3, reinterpret_cast<uint32_t>(fixedSustainArray));
-	g_patcher.WriteInt32(ADDROP_FCARRAY,		reinterpret_cast<uint32_t>(fixedFcArray));
-	g_patcher.WriteInt32(ADDROP_NOTEOFFSETARRAY, reinterpret_cast<uint32_t>(fixedOffsetArray));
+	if (!g_patcher.WriteInt32(ADDROP_SUSTAINARRAY_1, reinterpret_cast<uint32_t>(fixedSustainArray)) ||
+		!g_patcher.WriteInt32(ADDROP_SUSTAINARRAY_2, reinterpret_cast<uint32_t>(fixedSustainArray)) ||
+		!g_patcher.WriteInt32(ADDROP_SUSTAINARRAY_3, reinterpret_cast<uint32_t>(fixedSustainArray)) ||
+		!g_patcher.WriteInt32(ADDROP_FCARRAY, reinterpret_cast<uint32_t>(fixedFcArray)) ||
+		!g_patcher.WriteInt32(ADDROP_NOTEOFFSETARRAY, reinterpret_cast<uint32_t>(fixedOffsetArray)))
+	{
+		g_patcher.RemoveAllChanges();
+	}
 }
 

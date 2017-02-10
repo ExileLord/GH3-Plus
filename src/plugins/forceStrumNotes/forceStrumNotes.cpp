@@ -34,5 +34,8 @@ __declspec(naked) void forceTapFlagNaked2()
 
 void ApplyHack()
 {
-    g_patcher.WriteJmp(setHopoFlagDetour2, &forceTapFlagNaked2);
+    if (!g_patcher.WriteJmp(setHopoFlagDetour2, &forceTapFlagNaked2)) 
+	{
+		g_patcher.RemoveAllChanges();
+	}
 }

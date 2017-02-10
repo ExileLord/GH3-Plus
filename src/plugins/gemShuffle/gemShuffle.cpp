@@ -40,6 +40,8 @@ __declspec (naked) void fruityNaked()
 
 void ApplyHack()
 {
-	g_patcher.WriteJmp(fruityDetour, (void *)fruityNaked); 
-
+	if (!g_patcher.WriteJmp(fruityDetour, (void *)fruityNaked))
+	{
+		g_patcher.RemoveAllChanges();
+	}
 }

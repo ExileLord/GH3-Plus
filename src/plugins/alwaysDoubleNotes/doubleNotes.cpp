@@ -54,6 +54,9 @@ __declspec (naked) void hopoCheckNaked()
 
 void ApplyHack()
 {
-    g_patcher.WriteJmp((void *)0x0041D288, &tinyJump);
-	g_patcher.WriteJmp(hopoCheckDetour, hopoCheckNaked);
+	if (!g_patcher.WriteJmp((void *)0x0041D288, &tinyJump) ||
+		!g_patcher.WriteJmp(hopoCheckDetour, hopoCheckNaked))
+	{
+		g_patcher.RemoveAllChanges();
+	}
 }

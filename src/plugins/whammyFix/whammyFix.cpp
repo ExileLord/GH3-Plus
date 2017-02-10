@@ -142,6 +142,8 @@ void ApplyHack()
         g_structure[i] = 0xD15EA5ED;
         g_player[i] = 0xDEADFACE;
     }
-    g_patcher.WriteJmp(controllerRelatedStart, &storeControllerStructNaked);
-    g_patcher.WriteJmp(controllerInputDetour, &modifyWhammyInputNaked);
+	if (!g_patcher.WriteJmp(controllerRelatedStart, &storeControllerStructNaked) ||
+		!g_patcher.WriteJmp(controllerInputDetour, &modifyWhammyInputNaked)) {
+		g_patcher.RemoveAllChanges();
+	}
 }
