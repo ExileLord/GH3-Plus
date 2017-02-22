@@ -1,18 +1,35 @@
 #include "QbStruct.h"
 #include "GlobalMap.h"
 #include "BinaryTree.h"
+#include "gh3\malloc.h"
 
 namespace GH3
 {
+	//Constructors and Destructors
+	QbStruct::QbStruct()
+	{
+		this->unk0 = 0;
+		this->unk2 = 1;
+		this->unk3 = 0;
+		this->first = nullptr;
+	}
+	QbStruct::~QbStruct()
+	{
+	}
+
+
+
+
+
 	bool QbStruct::GetTypedValue(QbKey qbKey, QbValueType valueType, void * value)
 	{
-		QbStructNode *node; // edi@1
+		QbStructItem *node; // edi@1
 		void *value2; // ebp@2
 		QbValueType type; // al@3 MAPDST
 		HashMapNode *item; // eax@7
 		HashMapNode *item2; // esi@10
 		QbValueType itemType; // cl@18
-		QbStructNode *node2; // eax@43
+		QbStructItem *node2; // eax@43
 		bool success; // [sp+Bh] [bp-1h]@1
 					  // Is this the GetDWord variant for ints?
 		node = this->first;
@@ -131,7 +148,7 @@ namespace GH3
 													  // 
 													  // 
 		QbMap *map = reinterpret_cast<QbMap *>(node->value);
-		node2 = reinterpret_cast<QbStructNode *>(map->Get(qbKey));
+		node2 = reinterpret_cast<QbStructItem *>(map->Get(qbKey));
 		if (node2)
 		{
 			if (node2->Type() == valueType)
@@ -148,4 +165,112 @@ namespace GH3
 		return success;
 
 	}
+
+	bool QbStruct::GetInt(QbKey qbKey, int32_t & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeInt, &value);
+	}
+	bool QbStruct::GetUInt(QbKey qbKey, uint32_t & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeInt, &value);
+	}
+
+	bool QbStruct::GetFloat(QbKey qbKey, float & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeFloat, &value);
+	}
+	bool QbStruct::GetDouble(QbKey qbKey, double & value)
+	{
+		float fValue;
+		bool result = GetFloat(qbKey, fValue);
+		value = fValue;
+		return result;
+	}
+
+	bool QbStruct::GetString(QbKey qbKey, char *& value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeCString, &value);
+	}
+	bool QbStruct::GetWString(QbKey qbKey, wchar_t *& value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeWString, &value);
+	}
+
+	bool QbStruct::GetPair(QbKey qbKey, QbPair & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypePair, &value);
+	}
+	bool QbStruct::GetVector(QbKey qbKey, QbVector & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeVector, &value);
+	}
+	bool QbStruct::GetStruct(QbKey qbKey, QbStruct & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeQbStruct, &value);
+	}
+	bool QbStruct::GetArray(QbKey qbKey, QbArray & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeQbArray, &value);
+	}
+	bool QbStruct::GetQbKey(QbKey qbKey, QbKey & value)
+	{
+		return GetTypedValue(qbKey, QbValueType::TypeQbKey, &value);
+	}
+
+	bool QbStruct::ContainsItem(QbKey qbKey)
+	{
+		QbStructItem *item = this->first;
+		while (item != nullptr)
+		{
+			if (item->key == qbKey)
+				return true;
+			item = item->next;
+		}
+		return false;
+	}
+
+	bool QbStruct::ContainsTypedItem(QbKey qbKey, QbValueType type)
+	{
+
+		QbStructItem *item = this->first;
+		while (item != nullptr)
+		{
+			if (item->key == qbKey && item->Type() == type)
+				return true;
+			item = item->next;
+		}
+		return false;
+	}
+
+
+	void __thiscall QbStruct::InsertQbStructItem(QbKey qbKey, QbStruct * item)
+	{
+		static const void * const nativeFunction = (void *)0x00479E40;
+		__asm
+		{
+			push item;
+			push qbKey;
+			call nativeFunction;
+		}
+	}
+
+	void __thiscall QbStruct::InsertQbKeyItem(QbKey qbKey, QbKey item)
+	{
+		static const void * const nativeFunction = (void *)0x00479C80;
+		__asm
+		{
+			push item;
+			push qbKey;
+			call nativeFunction;
+		}
+	}
+
+
+
+
+
+
+
+
+
 }

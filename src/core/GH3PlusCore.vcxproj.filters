@@ -98,5 +98,14 @@
     <ClInclude Include="..\gh3\QbImage.h">
       <Filter>Header Files\GH3</Filter>
     </ClInclude>
+    <ClInclude Include="..\gh3\QbPair.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\QbVector.h">
+      <Filter>Header Files\GH3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gh3\malloc.h">
+      <Filter>Source Files\GH3</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

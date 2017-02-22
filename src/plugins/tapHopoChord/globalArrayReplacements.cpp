@@ -109,10 +109,10 @@ void __declspec(naked) whammyFxKeyFixingNaked()
 //.securom : 0173AD8C lea     eax, [eax + ecx * 4]
 //.securom : 0173AD8F add     eax, ecx
 
-static void *whammyFxKeyFixingSecuromDetour = (void *)0x0173AD88;
+static void * whammyFxKeyFixingSecuromDetour = (void *)0x0173AD88;
 void __declspec(naked) whammyFxKeyFixingSecuromNaked()
 {
-	static const void * const returnAddress = (void *)0x0173AD91;
+	static const void * returnAddress = (void *)0x0173AD91;
 	__asm
 	{
 		mov     eax, [esp + 1Ch];
@@ -140,12 +140,6 @@ void * g_fxKeyReferences[] =
 };
 void * g_fxKeyPlayer2Reference = (void *)(0x00424E76 + 4);
 //00424E76 
-
-void * g_gemCountReferences[] =
-{
-	(void *)0
-};
-
 
 
 template < uint32_t returnAddressRaw >
@@ -208,24 +202,24 @@ bool TryApplyGlobalArrayPatches()
 		!g_patcher.WritePointer(g_brokeStringKeyReference, g_brokeStringKey))
 		return false;
 
-	if (!g_patcher.WritePointer(g_buttonLipKeyReference, g_buttonLipKey) ||
-		!g_patcher.WritePointer(g_buttonMidKeyReference, g_buttonMidKey) ||
-		!g_patcher.WritePointer(g_buttonNeckKeyReference, g_buttonNeckKey) ||
-		!g_patcher.WritePointer(g_buttonHeadKeyReference, g_buttonHeadKey) ||
-		!g_patcher.WriteJmp((void*)0x004294F3, &mul_esi_ebx_24<0x004294FA>)) //GH3 uses a clever optimization to multiply by 5 (lea reg [reg + 4*reg]) that we can't mimic in the same amount of bytes for multiplying by 6
-		return false;
-
+	//if (!g_patcher.WritePointer(g_buttonLipKeyReference, g_buttonLipKey) ||
+	//	!g_patcher.WritePointer(g_buttonMidKeyReference, g_buttonMidKey) ||
+	//	!g_patcher.WritePointer(g_buttonNeckKeyReference, g_buttonNeckKey) ||
+	//	!g_patcher.WritePointer(g_buttonHeadKeyReference, g_buttonHeadKey) ||
+	//	!g_patcher.WriteJmp((void*)0x004294F3, &mul_esi_ebx_24<0x004294FA>)) //GH3 uses a clever optimization to multiply by 5 (lea reg [reg + 4*reg]) that we can't mimic in the same amount of bytes for multiplying by 6
+	//	return false;
+	
 	if (!g_patcher.WriteJmp(whammyFxKeyFixingDetour, whammyFxKeyFixingNaked) ||
 		!g_patcher.WriteJmp(whammyFxKeyFixingSecuromDetour, whammyFxKeyFixingSecuromNaked) ||
 		!g_patcher.WritePointerMulti(g_fxWhammyKeyReferences, ArrayLength(g_fxWhammyKeyReferences), g_fxWhammyKey) ||
 		!g_patcher.WritePointerMulti(g_fxWhammyParticleKeyReferences, ArrayLength(g_fxWhammyParticleKeyReferences), g_fxWhammyParticleKey))
 		return false;
-
-
+	
+	
 	if (!g_patcher.WritePointerMulti(g_fretNamesReferences, ArrayLength(g_fretNamesReferences), g_fretNames) ||
 		!g_patcher.WritePointerMulti(g_fretNamesEndReferences, ArrayLength(g_fretNamesEndReferences), &g_fretNames[ArrayLength(g_fretNames)]))
 		return false;
-
+	
 	if (!g_patcher.WritePointerMulti(g_fretMaskReferences, ArrayLength(g_fretMaskReferences), g_fretMask))
 		return false;
 	

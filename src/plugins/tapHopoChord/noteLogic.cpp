@@ -1,7 +1,10 @@
 #include "core\Patcher.h"
 #include "gh3\GH3Keys.h"
 #include "gh3\GH3GlobalAddresses.h"
+#include "gh3\malloc.h"
 #include "tapHopoChord.h"
+
+#include <cstring>
 
 
 FretMask getHighFret(FretMask fretMask)
@@ -444,7 +447,7 @@ uint32_t getAnchoredMask(uint32_t fretMask)
 
 void __stdcall noteHitEnd(uint32_t pIdx)
 {
-	g_lastHit[pIdx] = g_pressedFrets[pIdx];
+ 	g_lastHit[pIdx] = g_pressedFrets[pIdx];
 	g_canTap[pIdx] = 0;
 	g_canTapLow[pIdx] = 0;
 }
