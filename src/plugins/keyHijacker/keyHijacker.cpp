@@ -3,35 +3,28 @@
 #include "core\Patcher.h"
 #include "gh3\GH3Keys.h"
 #include "gh3\GH3GlobalAddresses.h"
-//#include <WinBase.h>
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
 #include <cstdio>
 #pragma comment(lib,"Winmm.lib")
 
-static const LPVOID GetDWord = (LPVOID)0x004786A0;
-static const LPVOID GetFloatDetour = (LPVOID)0x00478A48;
-static const LPVOID HijackGetFloatDetour = (LPVOID)0x00478A5A;
-
-
-static uint32_t g_lastKey = 0x00000000;
-static uint32_t g_lastFlag = 0x00000000;
-static uint32_t g_lastValue = 0x00000000;
-
-static uint32_t g_lastFloatKey = 0x00000000;
-static uint32_t g_probableSongSpeed = 0x00000000;
-static uint32_t g_probableSongPitch = 0x00000000;
+static const LPVOID changeDetour = (LPVOID)0x00538EF0;
+static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
+static uint32_t changeSpeedStruct[] = { 0x00010000, 0xCDCDCDCD,
+    0x00000500, 0x16D91BC1, 0x3F800000, 0x00000000 };
+static uint32_t changePitchStruct[] = { 0x00010000, 0xCDCDCDCD,
+    0x00001B00, 0xFD2C9E38, 0x3370A847, 0xCDCDCDCD,
+    0x00000500, 0xD8604126, 0x3F800000, 0x00000000 };
 
 static float g_hackedSpeed = 1.0f;
 static float g_hackedPitch = 1.0f;
 static int32_t g_currentInt = 100;
 static int32_t g_multiplier = 0;
 static bool g_keyHeld = false;
+static int g_speedUpdated = 0;
 
 static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
-
-
 
 BOOL PlayResource(LPCWSTR lpName)
 {
@@ -68,104 +61,87 @@ BOOL PlayResource(LPCWSTR lpName)
     return bRtn;
 }
 
-
-static const LPVOID SetCase2Detour = (LPVOID)0x00539245;
-__declspec(naked) void hijackCase2Naked()
+__declspec(naked) void changeOverrideNaked()
 {
-    static const uint32_t returnAddress = 0x0053924E;
+    static const uint32_t returnAddress = 0x538EFA;
+    static const uint32_t speedFactorKey = 0x16D91BC1;
+    static const uint32_t structureNameKey = 0xFD2C9E38;
+    static const uint32_t pitchStructKey = 0x3370A847;
+    static const uint32_t pitchKey = 0xD8604126;
 
     __asm
     {
-        mov     byte ptr[ebx + 2], 2;
-        mov     eax, g_probableSongSpeed;
-        sub     eax, 0xC;
-        cmp     eax, ebx;
-        jz      HIJACKSPEED
+    CHANGE:
+        // Copied start of "change"
+        sub     esp, 1Ch
+        push    ebp;
+        mov     ebp, [esp + 36]; // aList
+        push    esi;
+        push    edi;
 
-//         mov     eax, g_probableSongPitch;
-//         sub     eax, 0xC;
-//         cmp     eax, ebx;
-//         jz      HIJACKPITCH
+        // If the hacked values need to be changed, call change recursively to set them
+        pushad;
+        mov     eax, g_speedUpdated;
+        test    eax, eax;
+        jz      NORECURSE;
+        lea     eax, g_speedUpdated;
+        mov     [eax], 0;
+        lea     eax, changeSpeedStruct;
+        push    eax;
+        call    CHANGE;
+        pop     eax; // remove the stack item that change didn't clean up
+        lea     eax, changePitchStruct;
+        push    eax;
+        call    CHANGE;
+        pop     eax; // remove the stack item that change didn't clean up
+    NORECURSE:
+        popad;
+        // Check for current_speedfactor
+        mov     ecx, dword ptr[ebp + 4]; // Using edi and ecx because they are overwritten by
+        mov     edi, dword ptr[ecx + 4]; // existing code immediately after jumping back
+        cmp     edi, speedFactorKey;     
+        je      OVERWRITESPEED;
 
-        movss   dword ptr[ebx + 0xC], xmm0;
-
-        mov     eax, [ebx + 0xC];
-        cmp     eax, 0x3F2AAAAC; //0.6666
-        jz      STORESPEED
-
-//         cmp     eax, 0x3FC00000; //1.5
-//         jz      STOREPITCH
-
+        // Check for structurename
+        cmp     edi, structureNameKey;
+        je      CHECKPITCHSTRUCT;
         jmp     returnAddress;
 
-    STORESPEED:
-        mov     eax, g_probableSongSpeed;
-        cmp     eax, 0;
-        jnz     DONTSTORE;
-
-        lea     eax, [ebx + 0xC];
-        cmp     eax, 0x0B001111;
-        jle     DONTSTORE;
-        cmp     eax, 0x0F001111;
-        jge     DONTSTORE;
-
-        mov     g_probableSongSpeed, eax;
-        jmp     returnAddress;
-    
-//     STOREPITCH:
-//         mov     eax, g_probableSongPitch;
-//         cmp     eax, 0;
-//         jnz     DONTSTORE;
-//         mov     eax, g_probableSongSpeed; //Don't store if game speed hasn't been found
-//         cmp     eax, 0;
-//         jz      DONTSTORE;
-// 
-//         lea     eax, [ebx + 0xC];
-//         cmp     eax, 0x0A000000;
-//         jle     DONTSTORE;
-//         cmp     eax, 0x0C000000;
-//         jge     DONTSTORE;
-// 
-//         mov     g_probableSongPitch, eax;
-//         jmp     returnAddress;
-
-    DONTSTORE:
+    CHECKPITCHSTRUCT:
+        mov     edi, dword ptr[ecx + 8];
+        cmp     edi, pitchStructKey;
+        je      CHECKPITCH;
         jmp     returnAddress;
 
-    HIJACKSPEED:
-        mov     eax, g_hackedSpeed;
-        mov     [ebx + 0xC], eax;
+    CHECKPITCH:
+        mov     edi, dword ptr[ecx + 12]; // Next node of the linked list
+        mov     ecx, dword ptr[edi + 4];
+        cmp     ecx, pitchKey;
+        je      OVERWRITEPITCH;
         jmp     returnAddress;
 
-//     HIJACKPITCH:
-//         mov     eax, g_hackedPitch;
-//         mov[ebx + 0xC], eax;
-//         jmp     returnAddress;
+    OVERWRITESPEED:
+        mov     edi, g_hackedSpeed;
+        mov     dword ptr[ecx + 8], edi;
+        jmp     returnAddress;
+
+    OVERWRITEPITCH:
+        mov     ecx, g_hackedPitch;
+        mov     dword ptr[edi + 8], ecx;
+        jmp     returnAddress;
     }
 }
 
-//00539004 <- where pitch gets set yo
-
-
-
-
-
-
-
 int32_t getKeypadNumber();
 
-void applyNewSpeed( int32_t newSpeed )
+void applyNewSpeed(int32_t newSpeed)
 {
     if (newSpeed <= 0)
         return;
     g_hackedSpeed = (float)(newSpeed / 100.0f);
     g_hackedPitch = 1.0f / g_hackedSpeed;
     
-    if (g_probableSongSpeed != 0x00000000)
-        *((float *)g_probableSongSpeed) = g_hackedSpeed;
-
-    if (g_probableSongPitch != 0x00000000)
-        *((float *)g_probableSongPitch) = g_hackedPitch;
+    g_speedUpdated = 1;
 }
 
 void resetKeys()
@@ -189,11 +165,8 @@ void checkKeys()
             applyNewSpeed(g_multiplier);
             resetKeys();
             
-            //PlayResource(MAKEINTRESOURCE(IDR_WAVE1));
-            //PlaySound(MAKEINTRESOURCE(IDR_WAVE1), NULL, SND_RESOURCE | SND_ASYNC);
             PlaySound(TEXT("quack.wav"), NULL, SND_FILENAME | SND_ASYNC);
         }
-
     }
 
     if (g_keyHeld && number == -1)
@@ -210,14 +183,13 @@ int32_t getKeypadNumber()
 
     for (int i = 0; i < 10; ++i)
     {
-        if ( (keys[VK_NUMPAD0 + i] & 0x80) || (keys['0' + i]) & 0x80)
+        if ( (keys[VK_NUMPAD0 + i] & 0x80) || (keys['0' + i] & 0x80) )
             return i;
     }
 
     return -1;
 }
 
-static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
 _declspec(naked) void checkKeysNaked()
 {
     static const uint32_t returnAddress = 0x005B0C59;
@@ -237,15 +209,13 @@ _declspec(naked) void checkKeysNaked()
     }
 }
 
-
-
 void ApplyHack()
 {
-    //gh3p::WriteJmp(GetDWord, &storeLastKeyNaked);
-    //gh3p::WriteJmp(GetFloatDetour, &storeFloatKeyNaked);
-    //gh3p::WriteJmp(HijackGetFloatDetour, &hijackGetFloatNaked);
-    g_patcher.WriteJmp(SetCase2Detour, &hijackCase2Naked);
-    g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
+    // set up pointers within the changeX structs
+    changeSpeedStruct[1] = (uint32_t) &changeSpeedStruct[2];
+    changePitchStruct[1] = (uint32_t) &changePitchStruct[2];
+    changePitchStruct[5] = (uint32_t) &changePitchStruct[6];
 
-    
+    g_patcher.WriteJmp(changeDetour, &changeOverrideNaked);
+    g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
 }
