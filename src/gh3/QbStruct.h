@@ -35,21 +35,22 @@ namespace GH3
 	};
 
 	
+	struct GH3P_API QbStructItem
+	{
+		uint8_t unkFlag0;
+		QbNodeFlags flags;
+		uint16_t word2;
+		uint32_t key;
+		uint32_t value;
+		QbStructItem *next;
 
+		inline QbValueType Type() { return static_cast<QbValueType>(flags >> 1); }
+
+		QbStructItem(QbNodeFlags aFlags, QbKey aKey, uint32_t aValue);
+	};
 
 	struct GH3P_API QbStruct
 	{
-		struct QbStructItem
-		{
-			uint8_t unkFlag0;
-			QbNodeFlags flags;
-			uint16_t word2;
-			uint32_t key;
-			uint32_t value;
-			QbStructItem *next;
-
-			inline QbValueType Type() { return static_cast<QbValueType>(flags >> 1); }
-		};
 
 	private:
 		uint16_t unk0;
@@ -59,6 +60,7 @@ namespace GH3
 
 	public:
 		QbStruct();
+		QbStruct(QbStructItem *itemChain); //Use with care
 		~QbStruct();
 
 		bool GetTypedValue(QbKey qbKey, QbValueType valueType, void *outValue);

@@ -6,14 +6,15 @@
 namespace GH3
 {
 	//Constructors and Destructors
-	QbStruct::QbStruct()
+	QbStruct::QbStruct() : unk0(0), unk2(1), unk3(0), first(nullptr)
 	{
-		this->unk0 = 0;
-		this->unk2 = 1;
-		this->unk3 = 0;
-		this->first = nullptr;
 	}
-	QbStruct::~QbStruct()
+
+	QbStruct::QbStruct(QbStructItem * itemChain) : unk0(0), unk2(1), unk3(0), first(itemChain)
+	{
+	}
+
+	QbStruct::~QbStruct() 
 	{
 	}
 
@@ -272,5 +273,9 @@ namespace GH3
 
 
 
+
+	QbStructItem::QbStructItem(QbNodeFlags aFlags, QbKey aKey, uint32_t aValue) : unkFlag0(0), flags(aFlags), word2(0), key(aKey), value(aValue), next(nullptr)
+	{
+	}
 
 }
