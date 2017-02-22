@@ -12,7 +12,7 @@ The most recent release is v0.6. This release contains:
 - ForceStrumNotes
 - ForceTapNotes
 - GemShuffle
-- KeyHijacker (Buggy Speedhack)
+- Speedhack
 - MirrorMode
 - NoteLimitFix
 - TapHopoChord

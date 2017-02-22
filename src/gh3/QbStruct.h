@@ -63,6 +63,7 @@ namespace GH3
 		QbStruct(QbStructItem *itemChain); //Use with care
 		~QbStruct();
 
+		///Untested. Get a value from the QbStruct, traversing its children if necessary
 		bool GetTypedValue(QbKey qbKey, QbValueType valueType, void *outValue);
 		bool GetInt(QbKey qbKey, int32_t &value);
 		bool GetUInt(QbKey qbKey, uint32_t &value);
@@ -76,10 +77,12 @@ namespace GH3
 		bool GetArray(QbKey qbKey, QbArray &value);
 		bool GetQbKey(QbKey qbKey, QbKey &value);
 
+		///Gets an item in the immediate item chain of the struct (it will not recursively traverse nested structs, maps, or binary trees)
+		QbStructItem * GetItem(QbKey key);
+		QbStructItem * GetItem(QbKey qbKey, QbValueType type);
 		bool ContainsItem(QbKey qbKey);
-		bool ContainsTypedItem(QbKey qbKey, QbValueType type);
+		bool ContainsItem(QbKey qbKey, QbValueType type);
 
-		//void InsertTypedValue(QbKey qbKey, QbValueType valueType, uint32_t value);
 		void __thiscall InsertQbStructItem(QbKey qbKey, QbStruct *item);
 		void __thiscall InsertQbKeyItem(QbKey qbKey, QbKey item);
 	};

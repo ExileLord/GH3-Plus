@@ -21,7 +21,7 @@ namespace GH3
 
 
 
-
+	//Almost direct translation from IDA. Untested.
 	bool QbStruct::GetTypedValue(QbKey qbKey, QbValueType valueType, void * value)
 	{
 		QbStructItem *node; // edi@1
@@ -218,29 +218,38 @@ namespace GH3
 		return GetTypedValue(qbKey, QbValueType::TypeQbKey, &value);
 	}
 
-	bool QbStruct::ContainsItem(QbKey qbKey)
+	QbStructItem * QbStruct::GetItem(QbKey qbKey)
 	{
 		QbStructItem *item = this->first;
 		while (item != nullptr)
 		{
 			if (item->key == qbKey)
-				return true;
+				return item;
 			item = item->next;
 		}
-		return false;
+		return nullptr;
 	}
 
-	bool QbStruct::ContainsTypedItem(QbKey qbKey, QbValueType type)
+	QbStructItem * QbStruct::GetItem(QbKey qbKey, QbValueType type)
 	{
-
 		QbStructItem *item = this->first;
 		while (item != nullptr)
 		{
 			if (item->key == qbKey && item->Type() == type)
-				return true;
+				return item;
 			item = item->next;
 		}
-		return false;
+		return nullptr;
+	}
+
+	bool QbStruct::ContainsItem(QbKey qbKey)
+	{
+		return (GetItem(qbKey) != nullptr);
+	}
+
+	bool QbStruct::ContainsItem(QbKey qbKey, QbValueType type)
+	{
+		return (GetItem(qbKey) != nullptr);
 	}
 
 
