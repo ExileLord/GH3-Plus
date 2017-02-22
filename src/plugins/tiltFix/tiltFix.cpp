@@ -17,7 +17,6 @@ static uint32_t g_tiltStart[GH3_MAX_PLAYERS] = { 0 };
 static uint32_t g_timeMinThreshold = 266; //266 the equivalent of 16 frames at 60fps which is the default tilt threshold.
 static uint32_t g_timeMaxThreshold = 1000; //If the time difference is over 1000ms we must assume it is because of a bug.
 
-//static uint32_t g_timeThreshold = 1000; //If the difference is greater than 1000ms we must ass
 static float g_tiltAngleThreshold = -1.0f; //-1.0 is the highest the controller can be tilted with 1.0 being the lowest. Set this to a value less than -1.0 to never activate by tilting.
 
 static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);

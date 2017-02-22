@@ -14,7 +14,7 @@
 
 void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 {
-	/*open
+	/*  open
 		gem_material = sys_Gem2D_Open_sys_Gem2D_Open
 		gem_hammer_material = sys_Gem2D_Open_hammer_sys_Gem2D_Open_hammer
 		star_material = sys_Star2D_Open_sys_Star2D_Open
