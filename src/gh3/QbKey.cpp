@@ -2,7 +2,7 @@
 
 namespace GH3
 {
-	static const uint32_t crc32tab[] = {
+	static constexpr uint32_t crc32tab[] = {
 		0, 0x77073096, 0xEE0E612C, 0x990951BA, 0x76DC419, 0x706AF48F,
 		0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E,
 		0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -56,61 +56,52 @@ namespace GH3
 		0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D,
 	};
 
-	static uint32_t crc32(const char *key, uint32_t previousKey = 0xFFFFFFFF)
-	{
-		if (key == nullptr)
-			return 0;
-		
-		char c = *key;
-		uint32_t crc = previousKey;
-		for (const char *i = (key + 1); c != '\0'; ++i)
-		{
-			if ((c - 'A') <= 25)                   // If character is uppercase, convert to lowercase
-				c += 32;
-			if (c == '/')
-				c = '\\';
-			crc = crc32tab[(crc ^ c) & 0xFF] ^ (crc >> 8);
-			c = *i;
-		}
-		return crc;
-	}
+	//static uint32_t crc32(const char *key, uint32_t previousKey = 0xFFFFFFFF)
+	//{
+	//	if (key == nullptr)
+	//		return 0;
+	//	
+	//	char c = *key;
+	//	uint32_t crc = previousKey;
+	//	for (const char *i = (key + 1); c != '\0'; ++i)
+	//	{
+	//		if ((c - 'A') <= 25)                   // If character is uppercase, convert to lowercase
+	//			c += 32;
+	//		if (c == '/')
+	//			c = '\\';
+	//		crc = crc32tab[(crc ^ c) & 0xFF] ^ (crc >> 8);
+	//		c = *i;
+	//	}
+	//	return crc;
+	//}
+	//
+	//static char constexpr fixChar(char c)
+	//{
+	//	return	(c >= 'A' && c <= 'Z') ? (c + 32) :
+	//			(c == '/') ? '\\' :
+	//			c;
+	//}
+	//
+	//static uint32_t constexpr hashChar(uint32_t crc, char c)
+	//{
+	//	return crc32tab[(crc ^ fixChar(c)) & 0xFF] ^ (crc >> 8);
+	//}
+	//
+	//static uint32_t constexpr constCrc32(const char *key, uint32_t previousKey = 0xFFFFFFFF)
+	//{
+	//	return	(key == nullptr) ? 0 :
+	//			(*key == '\0') ? previousKey :
+	//			(constCrc32(key+1, hashChar(*key, previousKey)) );
+	//}
 
-	QbKey::QbKey() : m_key(0)
-	{
-	}
+	//QbKey & QbKey::operator+=(const char * rhs)
+	//{
+	//	m_key = crc32(rhs, m_key);
+	//	return *this;
+	//}
 
-	QbKey::QbKey(uint32_t key) : m_key(key)
-	{
-	}
-
-	QbKey::QbKey(const char *key) : m_key(crc32(key))
-	{
-	}
-
-
-	//Operators
-	QbKey & QbKey::operator=(const uint32_t rhs)
-	{
-		m_key = rhs;
-		return *this;
-	}
-
-	bool QbKey::operator<(const QbKey &rhs) const  { return m_key < rhs.m_key; }
-	bool QbKey::operator<=(const QbKey &rhs) const { return m_key <= rhs.m_key; }
-	bool QbKey::operator>(const QbKey &rhs) const  { return m_key > rhs.m_key; }
-	bool QbKey::operator>=(const QbKey &rhs) const { return m_key >= rhs.m_key; }
-	bool QbKey::operator==(const QbKey &rhs) const { return m_key == rhs.m_key; }
-	bool QbKey::operator!=(const QbKey &rhs) const { return m_key != rhs.m_key; }
-
-	QbKey & QbKey::operator+=(const char * rhs)
-	{
-		m_key = crc32(rhs, m_key);
-		return *this;
-	}
-
-	QbKey operator+(const QbKey & lhs, const char * rhs)
-	{
-		uint32_t newKey = crc32(rhs, static_cast<uint32_t>(lhs));
-		return QbKey(newKey);
-	}
+	//constexpr QbKey operator+(const QbKey & lhs, const char * rhs)
+	//{
+	//	return QbKey(constCrc32(rhs, static_cast<uint32_t>(lhs)));
+	//}
 }

@@ -8,11 +8,14 @@ GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
 void ApplyHack()
 {
-	if (!TryApplyGemLoadingPatches() ||
+	if (!TryApplyGlobalArrayPatches() ||
+		!TryApplyGemLoadingPatches() ||
 		!TryApplyGemMutationPatches() ||
 		!TryApplyNoteLoadingPatches() ||
 		!TryApplyNoteLogicPatches() ||
-		!TryApplyGlobalArrayPatches())
+		!TryApplyGemConstantsPatches() ||
+		!TryApplyTextureTakeoverPatches()
+		)
 	{
 		g_patcher.RemoveAllChanges();
 	}

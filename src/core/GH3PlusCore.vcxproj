@@ -92,6 +92,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\gh3\BinaryTree.cpp" />
+    <ClCompile Include="..\gh3\GlobalMap.cpp" />
     <ClCompile Include="..\gh3\QbArray.cpp" />
     <ClCompile Include="..\gh3\QbKey.cpp" />
     <ClCompile Include="..\gh3\QbMap.cpp" />
@@ -103,11 +105,18 @@
     <ClCompile Include="PatchManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\gh3\BinaryTree.h" />
+    <ClInclude Include="..\gh3\GlobalMap.h" />
+    <ClInclude Include="..\gh3\malloc.h" />
     <ClInclude Include="..\gh3\QbArray.h" />
+    <ClInclude Include="..\gh3\QbImage.h" />
     <ClInclude Include="..\gh3\QbKey.h" />
     <ClInclude Include="..\gh3\QbMap.h" />
+    <ClInclude Include="..\gh3\QbPair.h" />
     <ClInclude Include="..\gh3\QbStruct.h" />
     <ClInclude Include="..\gh3\QbValueType.h" />
+    <ClInclude Include="..\gh3\QbVector.h" />
+    <ClInclude Include="..\gh3\TextureMetadata.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="GH3Plus.h" />
     <ClInclude Include="Patcher.h" />

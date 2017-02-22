@@ -5,6 +5,9 @@
 
 namespace GH3P
 {
+
+	//Constructors and destructors
+
 	Patcher::Patcher(GH3::QbKey owner) : _owner(owner)
 	{
 	}
@@ -19,6 +22,14 @@ namespace GH3P
 		return PatchManager::RemovePatches(_owner);
 	}
 
+
+
+
+
+
+
+
+	//Jumps
 
 	bool Patcher::WriteJmp(void * addr, void * jumpDestination)
 	{
@@ -41,6 +52,38 @@ namespace GH3P
 
 		return true;
 	}
+
+
+
+
+
+	//Calls
+
+	bool Patcher::WriteCall(void * addr, void * calleeAddress)
+	{
+		uint8_t callBuffer[5];
+		uint32_t jmpSize = reinterpret_cast<uint8_t *>(calleeAddress) - reinterpret_cast<uint8_t *>(addr) - 5;
+
+		callBuffer[0] = 0xE8; //x86 call instruction
+		memcpy(&callBuffer[1], &jmpSize, sizeof(jmpSize));
+
+		return PatchManager::ApplyPatch(callBuffer, reinterpret_cast<uint8_t *>(addr), 5, _owner);
+	}
+
+	bool Patcher::WriteCallMulti(void ** addresses, uint32_t addressCount, void * calleeAddress)
+	{
+		for (uint32_t i = 0; i < addressCount; ++i)
+		{
+			if (!WriteCall(addresses[i], calleeAddress))
+				return false;
+		}
+
+		return true;
+	}
+
+
+
+	//Other writes
 
 	bool Patcher::WriteInt8(void * addr, uint8_t value)
 	{

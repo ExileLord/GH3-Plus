@@ -1,7 +1,10 @@
 #include "core\Patcher.h"
 #include "gh3\GH3Keys.h"
 #include "gh3\GH3GlobalAddresses.h"
+#include "gh3\malloc.h"
 #include "tapHopoChord.h"
+
+#include <cstring>
 
 
 FretMask getHighFret(FretMask fretMask)
@@ -65,10 +68,120 @@ void __stdcall noteHitEnd(uint32_t pIdx);
 
 
 
+
+
+
+
+
+
+
+
+
+
+static void * const heldFretsLoadingDetour = (void *)0x00431891;
+static void _declspec(naked) fixHeldFretsLoading()
+{
+	static const void * const returnAddress = (void *)0x00431898;
+
+	__asm
+	{
+		test	ebx, ebx;
+		jnz		DISPLACED_CODE
+		mov		ebx, OPEN; //Set held frets to the open note mask if the held frets are equal to 0
+
+		//Displaced code
+	DISPLACED_CODE:
+		and		ebx, esi;          //		.text:00431891 184 
+		mov     edx, ecx;		   //		.text:00431893 184 
+		add     esp, 4;			   //		.text:00431895 184 
+
+		jmp returnAddress;
+	}
+}
+
+
 ////////////////
 // ~~~~~~~~~~ //
 ////////////////
 
+//This will modify the chord branch to also work with open notes
+
+static void * const chordBranchFixDetour = (void *)0x00431D7F;
+
+static void __declspec(naked) chordBranchFixNaked()
+{
+	static const void * const returnIsSingle = (void *)0x00431E01;
+	static const void * const returnIsChord = (void *)0x00431EA6;
+
+	__asm
+	{
+		mov ecx, eax; //QbArray
+		call GetFretmaskFromNoteQbArray; //fastcall
+		mov ebx, eax;
+		mov ecx, eax;
+		call IsSingleNote
+		xor ecx, ecx;
+
+		test al, al;
+		jnz IS_SINGLE;
+		jmp returnIsChord;
+	IS_SINGLE:	
+		jmp returnIsSingle;
+	}
+}
+
+
+
+///
+
+//This will modify single note logic to also hit open notes
+
+
+
+bool __stdcall hitSingleNote(uint32_t pressedFrets, uint32_t noteFrets)
+{
+	if (pressedFrets == 0 || pressedFrets == FretMask::OPEN)
+		return (noteFrets == FretMask::OPEN || noteFrets == 0);
+
+	if (pressedFrets & FretMask::ORANGE)
+		return (noteFrets == FretMask::ORANGE);
+
+	if (pressedFrets & FretMask::BLUE)
+		return (noteFrets == FretMask::BLUE);
+
+	if (pressedFrets & FretMask::YELLOW)
+		return (noteFrets == FretMask::YELLOW);
+
+	if (pressedFrets & FretMask::RED)
+		return (noteFrets == FretMask::RED);
+
+	if (pressedFrets & FretMask::GREEN)
+		return (noteFrets == FretMask::GREEN);	
+}
+
+static void * const noteHitCheckDetour = (void *)0x00431E27;
+static void _declspec(naked) fixNoteHitCheckNaked()
+{
+	static const void * const returnNoteHit = (void *)0x00431E64;
+	static const void * const returnNoteMiss = (void *)0x00431E5B;
+
+	__asm
+	{
+		push	ecx; // preserve
+
+		push	ebx; // noteFrets
+		push	edx; // pressedFret
+		call	hitSingleNote;
+
+		pop		ecx;
+		test	al, al;
+		jnz		HIT_NOTE;
+		jmp		returnNoteMiss;
+
+	HIT_NOTE:
+		jmp returnNoteHit;
+	}
+}
 
 
 
@@ -129,7 +242,7 @@ uint32_t __stdcall loadLastHit(uint32_t pIdx)
 		hopoFlag = note.hopoFlag;
 		for (int i = 0; i < 5; ++i)
 		{
-			if (note.fret[i] == 1)
+			if (note.fretLength[i] == 1)
 				++fretCount;
 		}
 		if (fretCount > 1)
@@ -152,8 +265,6 @@ uint32_t __stdcall loadLastHit(uint32_t pIdx)
 	}
 
 }
-
-
 
 uint32_t *LoadCurrentNoteStruct(uint32_t pIdx)
 {
@@ -334,7 +445,12 @@ uint32_t getAnchoredMask(uint32_t fretMask)
 // ~~~~~~~~~~ //
 ////////////////
 
-
+void __stdcall noteHitEnd(uint32_t pIdx)
+{
+ 	g_lastHit[pIdx] = g_pressedFrets[pIdx];
+	g_canTap[pIdx] = 0;
+	g_canTapLow[pIdx] = 0;
+}
 
 __declspec(naked) void noteHitEndNaked()
 {
@@ -358,20 +474,121 @@ __declspec(naked) void noteHitEndNaked()
 	}
 }
 
-void __stdcall noteHitEnd(uint32_t pIdx)
+
+
+
+
+//TryHitNote updates
+
+//If an open note is being hit, make the pattern 0x33333 so that all the frets pop up!
+//This will also make it count them as 250 points so that needs to be fixed elsewhere
+static void * const noteHitPatternDetour = (void *)0x00430985;
+void __declspec(naked) noteHitPatternFixNaked()
 {
-	g_lastHit[pIdx] = g_pressedFrets[pIdx];
-	g_canTap[pIdx] = 0;
-	g_canTapLow[pIdx] = 0;
+	static const void * const returnAddress = (void *)0x0043098E;
+	__asm
+	{
+		mov     edi, [esp + 5Ch];
+		cmp     edi, OPEN;
+		jnz		DONE;
+
+		mov     edi, (OPEN | GREEN | RED | YELLOW | BLUE | ORANGE);
+		mov		[esp + 5Ch], edi;
+		
+	DONE:
+		//Displaced code
+		mov eax, KEY_PATTERN;
+		jmp returnAddress;
+	}
 }
+
+uint32_t __fastcall updateScoreFix(uint32_t fretmask)
+{
+	int count = 0;
+	if (fretmask & FretMask::OPEN) //Ignore other frets if it's an open note otherwise you could have open notes worth more than 50 points
+		return 1;
+
+	if (fretmask & FretMask::GREEN)
+		++count;
+	if (fretmask & FretMask::RED)
+		++count;
+	if (fretmask & FretMask::YELLOW)
+		++count;
+	if (fretmask & FretMask::BLUE)
+		++count;
+	if (fretmask & FretMask::ORANGE)
+		++count;
+
+	return count;
+}
+
+static void * const updateScoreDetour = (void *)0x00423F2F;
+void __declspec(naked) updateScoreFixNaked()
+{
+	static const void * const returnAddress = (void *)0x00423F68;
+	__asm
+	{
+		mov		ecx, eax;		//fretmask (fastcall)
+		call	updateScoreFix;
+		mov 	[esp + 8], eax;
+		jmp		returnAddress;
+	}
+}
+
+
+//We have to make update the tryhitnote logic to not load information for the open gems since there's no hitbar info associated with it.
+static int __fastcall loadGemTryHitNoteFix(GH3::QbArray *arr, int fretIndex)
+{
+	//If the note is an open note pretend it isn't and return 0.
+	fretIndex /= 4;
+	if (fretIndex == 5)
+		return 0;
+
+	return arr->Get(fretIndex + 1);
+
+}
+
+static void * const loadGemTryHitNoteDetour = (void *)0x00430AD3;
+void __declspec(naked) loadGemTryHitNoteFixNaked()
+{
+	static const void * const returnAddress = (void *)0x00430AEC;
+	__asm
+	{
+		mov	ecx, [esp + 28h];
+		add esp, 8; //Fix stack from previous cdecl call
+		mov edx, ebx;
+		call loadGemTryHitNoteFix;
+		jmp returnAddress;
+	}
+}
+
+
+
+
+
+
 
 bool TryApplyNoteLogicPatches()
 {
 	uint8_t *jnz_to_CHORD_CHECK_FAILED = (uint8_t *)(0x00431E75); // test before was cmp hopo vs 1
 
-	return (g_patcher.WriteJmp(guitarInputLogicDetour1, &loadLastHitNaked) &&
+	return
+		(
+			g_patcher.WriteJmp(guitarInputLogicDetour1, &loadLastHitNaked) &&
 			g_patcher.WriteJmp(guitarInputLogicDetour2, &setCanTapStateNaked) &&
 			g_patcher.WriteJmp(chordHitCheckDetour, &chordHitCheckNaked) &&
 			g_patcher.WriteInt8(jnz_to_CHORD_CHECK_FAILED, 0x7C) &&
-			g_patcher.WriteJmp(noteHitEndDetour2, &noteHitEndNaked));
+			g_patcher.WriteJmp(noteHitEndDetour2, &noteHitEndNaked) &&
+			g_patcher.WriteJmp(chordBranchFixDetour, &chordBranchFixNaked) &&
+			g_patcher.WriteJmp(noteHitCheckDetour, &fixNoteHitCheckNaked) &&
+			g_patcher.WriteJmp(heldFretsLoadingDetour, &fixHeldFretsLoading) &&
+
+			//TryHitNote Updates
+			g_patcher.WriteInt8((void *)(0x00430D33 + 2), (6 * 4)) && //Loop on 6 frets instead of 5
+			g_patcher.WriteJmp(noteHitPatternDetour, &noteHitPatternFixNaked) &&
+			g_patcher.WriteJmp(updateScoreDetour, &updateScoreFixNaked) &&
+			g_patcher.WriteJmp(loadGemTryHitNoteDetour, &loadGemTryHitNoteFixNaked)
+		);
+
+
 }

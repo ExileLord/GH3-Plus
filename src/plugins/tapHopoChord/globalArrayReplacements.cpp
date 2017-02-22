@@ -7,10 +7,9 @@
 #define ArrayLength(x) (sizeof(x)/sizeof(*(x)))
 
 //.data:00957B90 
-uint32_t g_gemColorKey[] = { KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, KEY_YELLOW };
+uint32_t g_gemColorKey[] = { KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, GH3::QbKey("open") };
 void * g_gemColorKeyReferences[] =
 {
-
 	(void *)(0x0041B956 + 2),
 	(void *)(0x0041E2F0 + 2),
 	(void *)(0x00424ECB + 2),
@@ -28,7 +27,7 @@ uint32_t g_HitNoteKey[] = { KEY_HITNOTE_GREEN, KEY_HITNOTE_RED, KEY_HITNOTE_YELL
 void * g_HitNoteKeyReference = (void *)(0x00435553 + 3);
 
 //.data:00957BA4k
-uint32_t g_brokeStringKey[] = { KEY_BROKEN_STRING_GREEN, KEY_BROKEN_STRING_RED, KEY_BROKEN_STRING_YELLOW, KEY_BROKEN_STRING_BLUE, KEY_BROKEN_STRING_ORANGE, KEY_YELLOW };
+uint32_t g_brokeStringKey[] = { KEY_BROKEN_STRING_GREEN, KEY_BROKEN_STRING_RED, KEY_BROKEN_STRING_YELLOW, KEY_BROKEN_STRING_BLUE, KEY_BROKEN_STRING_ORANGE, KEY_BROKEN_STRING_YELLOW };
 void * g_brokeStringKeyReference = (void *)(0x00429C64 + 3);
 
 //"Button" arrays
@@ -110,10 +109,10 @@ void __declspec(naked) whammyFxKeyFixingNaked()
 //.securom : 0173AD8C lea     eax, [eax + ecx * 4]
 //.securom : 0173AD8F add     eax, ecx
 
-static void *whammyFxKeyFixingSecuromDetour = (void *)0x0173AD88;
+static void * whammyFxKeyFixingSecuromDetour = (void *)0x0173AD88;
 void __declspec(naked) whammyFxKeyFixingSecuromNaked()
 {
-	static const void * const returnAddress = (void *)0x0173AD91;
+	static const void * returnAddress = (void *)0x0173AD91;
 	__asm
 	{
 		mov     eax, [esp + 1Ch];
@@ -141,12 +140,6 @@ void * g_fxKeyReferences[] =
 };
 void * g_fxKeyPlayer2Reference = (void *)(0x00424E76 + 4);
 //00424E76 
-
-void * g_gemCountReferences[] =
-{
-	(void *)0
-};
-
 
 
 template < uint32_t returnAddressRaw >
@@ -202,8 +195,6 @@ void * g_fretMaskReferences[] =
 
 
 
-
-
 bool TryApplyGlobalArrayPatches()
 {
 	if (!g_patcher.WritePointerMulti(g_gemColorKeyReferences, ArrayLength(g_gemColorKeyReferences), g_gemColorKey) ||
@@ -211,24 +202,24 @@ bool TryApplyGlobalArrayPatches()
 		!g_patcher.WritePointer(g_brokeStringKeyReference, g_brokeStringKey))
 		return false;
 
-	if (!g_patcher.WritePointer(g_buttonLipKeyReference, g_buttonLipKey) ||
-		!g_patcher.WritePointer(g_buttonMidKeyReference, g_buttonMidKey) ||
-		!g_patcher.WritePointer(g_buttonNeckKeyReference, g_buttonNeckKey) ||
-		!g_patcher.WritePointer(g_buttonHeadKeyReference, g_buttonHeadKey) ||
-		!g_patcher.WriteJmp((void*)0x004294F3, &mul_esi_ebx_24<0x004294FA>)) //GH3 uses a clever optimization to multiply by 5 (lea reg [reg + 4*reg]) that we can't mimic in the same amount of bytes for multiplying by 6
-		return false;
-
+	//if (!g_patcher.WritePointer(g_buttonLipKeyReference, g_buttonLipKey) ||
+	//	!g_patcher.WritePointer(g_buttonMidKeyReference, g_buttonMidKey) ||
+	//	!g_patcher.WritePointer(g_buttonNeckKeyReference, g_buttonNeckKey) ||
+	//	!g_patcher.WritePointer(g_buttonHeadKeyReference, g_buttonHeadKey) ||
+	//	!g_patcher.WriteJmp((void*)0x004294F3, &mul_esi_ebx_24<0x004294FA>)) //GH3 uses a clever optimization to multiply by 5 (lea reg [reg + 4*reg]) that we can't mimic in the same amount of bytes for multiplying by 6
+	//	return false;
+	
 	if (!g_patcher.WriteJmp(whammyFxKeyFixingDetour, whammyFxKeyFixingNaked) ||
 		!g_patcher.WriteJmp(whammyFxKeyFixingSecuromDetour, whammyFxKeyFixingSecuromNaked) ||
 		!g_patcher.WritePointerMulti(g_fxWhammyKeyReferences, ArrayLength(g_fxWhammyKeyReferences), g_fxWhammyKey) ||
 		!g_patcher.WritePointerMulti(g_fxWhammyParticleKeyReferences, ArrayLength(g_fxWhammyParticleKeyReferences), g_fxWhammyParticleKey))
 		return false;
-
-
+	
+	
 	if (!g_patcher.WritePointerMulti(g_fretNamesReferences, ArrayLength(g_fretNamesReferences), g_fretNames) ||
 		!g_patcher.WritePointerMulti(g_fretNamesEndReferences, ArrayLength(g_fretNamesEndReferences), &g_fretNames[ArrayLength(g_fretNames)]))
 		return false;
-
+	
 	if (!g_patcher.WritePointerMulti(g_fretMaskReferences, ArrayLength(g_fretMaskReferences), g_fretMask))
 		return false;
 	
