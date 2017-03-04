@@ -94,6 +94,32 @@ constexpr GH3::QbKey YellowStarHammerTextureKey =		"sys_star2d_yellow_hammer_sys
 constexpr GH3::QbKey YellowStarpowerTextureKey =		"sys_gem2d_starpower_sys_gem2d_starpower";
 constexpr GH3::QbKey YellowStarpowerHammerTextureKey =	"sys_gem2d_starpower_hammer_sys_gem2d_starpower_hammer";
 
+constexpr GH3::QbKey RawGreenAnimTextureKey = "images\\highway\\gem2d_green_anim.img";
+constexpr GH3::QbKey RawGreenHammerAnimTextureKey = "images\\highway\\gem2d_green_hammer_anim.img";
+constexpr GH3::QbKey RawRedAnimTextureKey = "images\\highway\\gem2d_red_anim.img";
+constexpr GH3::QbKey RawRedHammerAnimTextureKey = "images\\highway\\gem2d_red_hammer_anim.img";
+constexpr GH3::QbKey RawYellowAnimTextureKey = "images\\highway\\gem2d_yellow_anim.img";
+constexpr GH3::QbKey RawYellowHammerAnimTextureKey = "images\\highway\\gem2d_yellow_hammer_anim.img";
+constexpr GH3::QbKey RawBlueAnimTextureKey = "images\\highway\\gem2d_blue_anim.img";
+constexpr GH3::QbKey RawBlueHammerAnimTextureKey = "images\\highway\\gem2d_blue_hammer_anim.img";
+constexpr GH3::QbKey RawOrangeAnimTextureKey = "images\\highway\\gem2d_orange_anim.img";
+constexpr GH3::QbKey RawOrangeHammerAnimTextureKey = "images\\highway\\gem2d_orange_hammer_anim.img";
+constexpr GH3::QbKey RawStarpowerAnimTextureKey = "images\\highway\\gem2d_starpower_anim.img";
+constexpr GH3::QbKey RawStarpowerHammerAnimTextureKey = "images\\highway\\gem2d_starpower_hammer_anim.img";
+
+constexpr GH3::QbKey GreenAnimTextureKey = "sys_Gem2D_green_anim_sys_Gem2D_green_anim";
+constexpr GH3::QbKey GreenHammerAnimTextureKey = "sys_Gem2D_green_hammer_anim_sys_Gem2D_green_hammer_anim";
+constexpr GH3::QbKey RedAnimTextureKey = "sys_Gem2D_red_anim_sys_Gem2D_red_anim";
+constexpr GH3::QbKey RedHammerAnimTextureKey = "sys_Gem2D_red_hammer_anim_sys_Gem2D_red_hammer_anim";
+constexpr GH3::QbKey YellowAnimTextureKey = "sys_Gem2D_yellow_anim_sys_Gem2D_yellow_anim";
+constexpr GH3::QbKey YellowHammerAnimTextureKey = "sys_Gem2D_yellow_hammer_anim_sys_Gem2D_yellow_hammer_anim";
+constexpr GH3::QbKey BlueAnimTextureKey = "sys_Gem2D_blue_anim_sys_Gem2D_blue_anim";
+constexpr GH3::QbKey BlueHammerAnimTextureKey = "sys_Gem2D_blue_hammer_anim_sys_Gem2D_blue_hammer_anim";
+constexpr GH3::QbKey OrangeAnimTextureKey = "sys_Gem2D_orange_anim_sys_Gem2D_orange_anim";
+constexpr GH3::QbKey OrangeHammerAnimTextureKey = "sys_Gem2D_orange_hammer_anim_sys_Gem2D_orange_hammer_anim";
+constexpr GH3::QbKey StarpowerAnimTextureKey = "sys_Gem2D_starpower_anim_sys_Gem2D_starpower_anim";
+constexpr GH3::QbKey StarpowerHammerAnimTextureKey = "sys_Gem2D_starpower_hammer_anim_sys_Gem2D_starpower_hammer_anim";
+
 extern GH3P::Patcher g_patcher;
 
 extern float g_gemStartPosX[6];
