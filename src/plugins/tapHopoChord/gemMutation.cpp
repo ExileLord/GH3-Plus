@@ -7,7 +7,6 @@
 
 #include <cstring>
 
-
 //////////////////////////////////////////
 // Button model fixing (for open notes) //
 //////////////////////////////////////////
@@ -55,6 +54,39 @@ void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 	constexpr GH3::QbKey star_power_whammy_material_value = GH3::QbKey("sys_Whammy2D_StarPower_sys_Whammy2D_StarPower");
 	constexpr GH3::QbKey dead_whammy_value = GH3::QbKey("sys_Whammy2D_Dead_sys_Whammy2D_Dead");
 	constexpr GH3::QbKey name_value = GH3::QbKey("button_z");
+
+
+#if ANIMATED_NOTES 
+	auto green = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("green")->value);
+	green.GetItem("gem_material")->value = (uint32_t)GreenAnimTextureKey;
+	green.GetItem("gem_hammer_material")->value = (uint32_t)GreenHammerAnimTextureKey;
+	green.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+	green.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+	auto red = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("red")->value);
+	red.GetItem("gem_material")->value = (uint32_t)RedAnimTextureKey;
+	red.GetItem("gem_hammer_material")->value = (uint32_t)RedHammerAnimTextureKey;
+	red.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+	red.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+	auto yellow = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("yellow")->value);
+	yellow.GetItem("gem_material")->value = (uint32_t)YellowAnimTextureKey;
+	yellow.GetItem("gem_hammer_material")->value = (uint32_t)YellowHammerAnimTextureKey;
+	yellow.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+	yellow.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+	auto blue = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("blue")->value);
+	blue.GetItem("gem_material")->value = (uint32_t)BlueAnimTextureKey;
+	blue.GetItem("gem_hammer_material")->value = (uint32_t)BlueHammerAnimTextureKey;
+	blue.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+	blue.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+	auto orange = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("orange")->value);
+	orange.GetItem("gem_material")->value = (uint32_t)OrangeAnimTextureKey;
+	orange.GetItem("gem_hammer_material")->value = (uint32_t)OrangeHammerAnimTextureKey;
+	orange.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+	orange.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+#endif
 
 	if (!buttonModels->ContainsItem(openKey))
 	{

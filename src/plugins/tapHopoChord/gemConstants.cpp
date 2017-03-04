@@ -31,7 +31,37 @@ uint32_t g_gemMatHammerSp[6] = { 0 };
 uint32_t g_gemMatWhammy[6] = { 0 };
 uint32_t g_gemMatSpWhammy[6] = { 0 };
 
+void __declspec(naked) setupAnimNotes()
+{
+	__asm pushad;
 
+	g_gemMatNormal[0] = GreenAnimTextureKey;
+	g_gemMatNormal[1] = RedAnimTextureKey;
+	g_gemMatNormal[2] = YellowAnimTextureKey;
+	g_gemMatNormal[3] = BlueAnimTextureKey;
+	g_gemMatNormal[4] = OrangeAnimTextureKey;
+
+	g_gemMatHammer[0] = GreenHammerAnimTextureKey;
+	g_gemMatHammer[1] = RedHammerAnimTextureKey;
+	g_gemMatHammer[2] = YellowHammerAnimTextureKey;
+	g_gemMatHammer[3] = BlueHammerAnimTextureKey;
+	g_gemMatHammer[4] = OrangeHammerAnimTextureKey;
+
+	g_gemMatSp[0] = StarpowerAnimTextureKey;
+	g_gemMatSp[1] = StarpowerAnimTextureKey;
+	g_gemMatSp[2] = StarpowerAnimTextureKey;
+	g_gemMatSp[3] = StarpowerAnimTextureKey;
+	g_gemMatSp[4] = StarpowerAnimTextureKey;
+
+	g_gemMatHammerSp[0] = StarpowerHammerAnimTextureKey;
+	g_gemMatHammerSp[1] = StarpowerHammerAnimTextureKey;
+	g_gemMatHammerSp[2] = StarpowerHammerAnimTextureKey;
+	g_gemMatHammerSp[3] = StarpowerHammerAnimTextureKey;
+	g_gemMatHammerSp[4] = StarpowerHammerAnimTextureKey;
+
+	__asm popad;
+	__asm retn;
+}
 
 void __declspec(naked) setupOpenNote()
 {
@@ -116,6 +146,9 @@ void __declspec(naked) gemConstantFixingNaked()
 		add     esi, 4;
 		cmp     esi, 20;
 		jl      LOOP_ADDRESS;
+#if ANIMATED_NOTES
+		call    setupAnimNotes;
+#endif
 		call    setupOpenNote;
 		jmp     returnAddress;
 	LOOP_ADDRESS:

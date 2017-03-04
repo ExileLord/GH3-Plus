@@ -3,6 +3,7 @@
 #include "core\Patcher.h"
 #include "gh3\QbArray.h"
 
+#define ANIMATED_NOTES 1
 
 ///Determines which tapping gem sprite to use under starpower since we don't have a starpower texture
 //Set this to 0 to use the green note texture
