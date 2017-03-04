@@ -204,10 +204,7 @@ WeirdTextureStruct * __stdcall frankerzFix(GH3::QbMap *map, GH3::QbKey *key)
 	if (node == nullptr) {
 		GH3::QbKey yellowKey;
 
-		if (isOpenTextureKey(*key)) {
-			yellowKey = getYellowEquivalent(*key);
-		}
-		else if (isTextureKey(*key)) {
+		if (isTextureKey(*key)) {
 			yellowKey = YellowStarTextureKey;
 		}
 		else {

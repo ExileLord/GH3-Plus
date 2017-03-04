@@ -73,12 +73,12 @@ bool __fastcall IsSingleNote(FretMask fretMask);
 FretMask __fastcall GetFretmaskFromTrackArray(GH3::QbArray *trackArray, int currentNote);
 FretMask __fastcall GetFretmaskFromNoteQbArray(GH3::QbArray *noteArr);
 
-constexpr GH3::QbKey RawOpenTextureKey =				"images\\highway\\gem2d_open.img";
-constexpr GH3::QbKey RawOpenHammerTextureKey =			"images\\highway\\gem2d_open_hammer.img";
+constexpr GH3::QbKey RawOpenTextureKey =				"images\\highway\\gem2d_open_anim.img";
+constexpr GH3::QbKey RawOpenHammerTextureKey =			"images\\highway\\gem2d_open_hammer_anim.img";
 constexpr GH3::QbKey RawOpenStarTextureKey =			"images\\highway\\star2d_open.img";
 constexpr GH3::QbKey RawOpenStarHammerTextureKey =		"images\\highway\\star2d_open_hammer.img";
-constexpr GH3::QbKey RawOpenStarpowerTextureKey =		"images\\highway\\gem2d_open_starpower.img";
-constexpr GH3::QbKey RawOpenStarpowerHammerTextureKey = "images\\highway\\gem2d_open_hammer_starpower.img";
+constexpr GH3::QbKey RawOpenStarpowerTextureKey =		"images\\highway\\gem2d_open_starpower_anim.img";
+constexpr GH3::QbKey RawOpenStarpowerHammerTextureKey = "images\\highway\\gem2d_open_hammer_starpower_anim.img";
 
 constexpr GH3::QbKey OpenTextureKey =					"sys_gem2d_open_sys_gem2d_open";
 constexpr GH3::QbKey OpenHammerTextureKey =				"sys_gem2d_open_hammer_sys_gem2d_open_hammer";
