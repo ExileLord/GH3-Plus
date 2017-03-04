@@ -121,6 +121,32 @@ constexpr GH3::QbKey OrangeHammerAnimTextureKey = "sys_Gem2D_orange_hammer_anim_
 constexpr GH3::QbKey StarpowerAnimTextureKey = "sys_Gem2D_starpower_anim_sys_Gem2D_starpower_anim";
 constexpr GH3::QbKey StarpowerHammerAnimTextureKey = "sys_Gem2D_starpower_hammer_anim_sys_Gem2D_starpower_hammer_anim";
 
+constexpr GH3::QbKey RawGreenTapTextureKey = "images\\highway\\gem2d_green_tap.img";
+constexpr GH3::QbKey RawRedTapTextureKey = "images\\highway\\gem2d_red_tap.img";
+constexpr GH3::QbKey RawYellowTapTextureKey = "images\\highway\\gem2d_yellow_tap.img";
+constexpr GH3::QbKey RawBlueTapTextureKey = "images\\highway\\gem2d_blue_tap.img";
+constexpr GH3::QbKey RawOrangeTapTextureKey = "images\\highway\\gem2d_orange_tap.img";
+constexpr GH3::QbKey RawStarpowerTapTextureKey = "images\\highway\\gem2d_starpower_tap.img";
+
+constexpr GH3::QbKey RawGreenTapStarTextureKey = "images\\highway\\star2d_green_tap.img";
+constexpr GH3::QbKey RawRedTapStarTextureKey = "images\\highway\\star2d_red_tap.img";
+constexpr GH3::QbKey RawYellowTapStarTextureKey = "images\\highway\\star2d_yellow_tap.img";
+constexpr GH3::QbKey RawBlueTapStarTextureKey = "images\\highway\\star2d_blue_tap.img";
+constexpr GH3::QbKey RawOrangeTapStarTextureKey = "images\\highway\\star2d_orange_tap.img";
+
+constexpr GH3::QbKey GreenTapTextureKey = "sys_Gem2D_green_tap_sys_Gem2D_green_tap";
+constexpr GH3::QbKey RedTapTextureKey = "sys_Gem2D_red_tap_sys_Gem2D_red_tap";
+constexpr GH3::QbKey YellowTapTextureKey = "sys_Gem2D_yellow_tap_sys_Gem2D_yellow_tap";
+constexpr GH3::QbKey BlueTapTextureKey = "sys_Gem2D_blue_tap_sys_Gem2D_blue_tap";
+constexpr GH3::QbKey OrangeTapTextureKey = "sys_Gem2D_orange_tap_sys_Gem2D_orange_tap";
+constexpr GH3::QbKey StarpowerTapTextureKey = "sys_Gem2D_starpower_tap_sys_Gem2D_starpower_tap";
+
+constexpr GH3::QbKey GreenTapStarTextureKey = "sys_Star2D_green_tap_sys_Star2D_green_tap";
+constexpr GH3::QbKey RedTapStarTextureKey = "sys_Star2D_red_tap_sys_Star2D_red_tap";
+constexpr GH3::QbKey YellowTapStarTextureKey = "sys_Star2D_yellow_tap_sys_Star2D_yellow_tap";
+constexpr GH3::QbKey BlueTapStarTextureKey = "sys_Star2D_blue_tap_sys_Star2D_blue_tap";
+constexpr GH3::QbKey OrangeTapStarTextureKey = "sys_Star2D_orange_tap_sys_Star2D_orange_tap";
+
 extern GH3P::Patcher g_patcher;
 
 extern float g_gemStartPosX[6];

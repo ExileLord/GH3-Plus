@@ -136,6 +136,18 @@ static constexpr std::pair<GH3::QbKey, GH3::QbKey> g_texKeyMapping[] = {
 	{ RawOrangeHammerAnimTextureKey, OrangeHammerAnimTextureKey },
 	{ RawStarpowerAnimTextureKey, StarpowerAnimTextureKey },
 	{ RawStarpowerHammerAnimTextureKey, StarpowerHammerAnimTextureKey },
+
+	{ RawGreenTapTextureKey, GreenTapTextureKey },
+	{ RawRedTapTextureKey, RedTapTextureKey },
+	{ RawYellowTapTextureKey, YellowTapTextureKey },
+	{ RawBlueTapTextureKey, BlueTapTextureKey },
+	{ RawOrangeTapTextureKey, OrangeTapTextureKey },
+	{ RawStarpowerTapTextureKey, StarpowerTapTextureKey },
+	{ RawGreenTapStarTextureKey, GreenTapStarTextureKey },
+	{ RawRedTapStarTextureKey, RedTapStarTextureKey },
+	{ RawYellowTapStarTextureKey, YellowTapStarTextureKey },
+	{ RawBlueTapStarTextureKey, BlueTapStarTextureKey },
+	{ RawOrangeTapStarTextureKey, OrangeTapStarTextureKey },
 };
 
 ///////////////////////////
