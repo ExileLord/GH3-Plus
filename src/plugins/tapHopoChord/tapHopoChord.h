@@ -3,8 +3,6 @@
 #include "core\Patcher.h"
 #include "gh3\QbArray.h"
 
-#define ANIMATED_NOTES 1
-
 ///Determines which tapping gem sprite to use under starpower since we don't have a starpower texture
 //Set this to 0 to use the green note texture
 //            1 to use the red note texture
@@ -177,6 +175,9 @@ extern uint32_t g_gemMatHammerSp[6];
 extern uint32_t g_gemMatWhammy[6];
 extern uint32_t g_gemMatSpWhammy[6];
 
+extern uint32_t g_gemMatTap[6];
+extern uint32_t g_gemMatTapStar[6];
+extern uint32_t g_gemMatTapSp[6];
 
 void ApplyHack();
 

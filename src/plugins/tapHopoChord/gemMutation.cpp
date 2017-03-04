@@ -55,8 +55,6 @@ void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 	constexpr GH3::QbKey dead_whammy_value = GH3::QbKey("sys_Whammy2D_Dead_sys_Whammy2D_Dead");
 	constexpr GH3::QbKey name_value = GH3::QbKey("button_z");
 
-
-#if ANIMATED_NOTES 
 	auto green = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("green")->value);
 	green.GetItem("gem_material")->value = (uint32_t)GreenAnimTextureKey;
 	green.GetItem("gem_hammer_material")->value = (uint32_t)GreenHammerAnimTextureKey;
@@ -86,7 +84,6 @@ void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 	orange.GetItem("gem_hammer_material")->value = (uint32_t)OrangeHammerAnimTextureKey;
 	orange.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
 	orange.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
-#endif
 
 	if (!buttonModels->ContainsItem(openKey))
 	{

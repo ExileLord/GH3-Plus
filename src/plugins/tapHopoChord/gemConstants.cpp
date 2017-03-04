@@ -31,6 +31,10 @@ uint32_t g_gemMatHammerSp[6] = { 0 };
 uint32_t g_gemMatWhammy[6] = { 0 };
 uint32_t g_gemMatSpWhammy[6] = { 0 };
 
+uint32_t g_gemMatTap[6] = { 0 };
+uint32_t g_gemMatTapStar[6] = { 0 };
+uint32_t g_gemMatTapSp[6] = { 0 };
+
 void __declspec(naked) setupAnimNotes()
 {
 	__asm pushad;
@@ -58,6 +62,24 @@ void __declspec(naked) setupAnimNotes()
 	g_gemMatHammerSp[2] = StarpowerHammerAnimTextureKey;
 	g_gemMatHammerSp[3] = StarpowerHammerAnimTextureKey;
 	g_gemMatHammerSp[4] = StarpowerHammerAnimTextureKey;
+
+	g_gemMatTap[0] = GreenTapTextureKey;
+	g_gemMatTap[1] = RedTapTextureKey;
+	g_gemMatTap[2] = YellowTapTextureKey;
+	g_gemMatTap[3] = BlueTapTextureKey;
+	g_gemMatTap[4] = OrangeTapTextureKey;
+
+	g_gemMatTapStar[0] = GreenTapStarTextureKey;
+	g_gemMatTapStar[1] = RedTapStarTextureKey;
+	g_gemMatTapStar[2] = YellowTapStarTextureKey;
+	g_gemMatTapStar[3] = BlueTapStarTextureKey;
+	g_gemMatTapStar[4] = OrangeTapStarTextureKey;
+
+	g_gemMatTapSp[0] = StarpowerTapTextureKey;
+	g_gemMatTapSp[1] = StarpowerTapTextureKey;
+	g_gemMatTapSp[2] = StarpowerTapTextureKey;
+	g_gemMatTapSp[3] = StarpowerTapTextureKey;
+	g_gemMatTapSp[4] = StarpowerTapTextureKey;
 
 	__asm popad;
 	__asm retn;
@@ -90,7 +112,9 @@ void __declspec(naked) setupOpenNote()
 	g_gemMatWhammy[5] = g_gemMatWhammy[2];
 	g_gemMatSpWhammy[5] = g_gemMatSpWhammy[2];
 
-
+	g_gemMatTap[5] = OpenHammerTextureKey;
+	g_gemMatTapStar[5] = OpenStarHammerTextureKey;
+	g_gemMatTapSp[5] = OpenStarpowerHammerTextureKey;
 
 	__asm popad;
 	__asm retn;
@@ -146,9 +170,7 @@ void __declspec(naked) gemConstantFixingNaked()
 		add     esi, 4;
 		cmp     esi, 20;
 		jl      LOOP_ADDRESS;
-#if ANIMATED_NOTES
 		call    setupAnimNotes;
-#endif
 		call    setupOpenNote;
 		jmp     returnAddress;
 	LOOP_ADDRESS:

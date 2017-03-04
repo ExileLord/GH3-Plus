@@ -75,7 +75,7 @@ __declspec(naked) void makeStarTapGemsNaked()
 		jle L_NOT_TAPPING; //if 0 or 1 then it's strummed or hopo
 
 						   //tapping note
-		mov edi, [g_gemMatHammerBattle + eax * 4];
+		mov edi, [g_gemMatTapStar + eax * 4];
 		jmp tappingReturn;
 
 	L_NOT_TAPPING:
@@ -115,7 +115,7 @@ __declspec(naked) void makeTapGemsNaked()
 		jmp returnAddress;
 
 	L_TAPPING_GEM:
-		mov edi, [g_gemMatBattle + eax * 4];
+		mov edi, [g_gemMatTap + eax * 4];
 		jmp returnAddress;
 	}
 }
@@ -135,8 +135,7 @@ __declspec(naked) void makeSpTapGemsNaked()
 		jnz		NORMAL_NOTE;
 
 		//Tap notes
-		mov		eax, SP_TAP_NOTE_GEM_INDEX;
-		mov     edi, [g_gemMatBattle + eax * 4];
+		mov     edi, [g_gemMatTapSp + eax * 4];
 		jmp		returnAddress;
 
 	NORMAL_NOTE:
