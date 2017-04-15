@@ -39,47 +39,93 @@ void __declspec(naked) setupAnimNotes()
 {
 	__asm pushad;
 
-	g_gemMatNormal[0] = GreenAnimTextureKey;
-	g_gemMatNormal[1] = RedAnimTextureKey;
-	g_gemMatNormal[2] = YellowAnimTextureKey;
-	g_gemMatNormal[3] = BlueAnimTextureKey;
-	g_gemMatNormal[4] = OrangeAnimTextureKey;
+	if (animNotesEnabled) {
+		g_gemMatNormal[0] = GreenAnimTextureKey;
+		g_gemMatNormal[1] = RedAnimTextureKey;
+		g_gemMatNormal[2] = YellowAnimTextureKey;
+		g_gemMatNormal[3] = BlueAnimTextureKey;
+		g_gemMatNormal[4] = OrangeAnimTextureKey;
 
-	g_gemMatHammer[0] = GreenHammerAnimTextureKey;
-	g_gemMatHammer[1] = RedHammerAnimTextureKey;
-	g_gemMatHammer[2] = YellowHammerAnimTextureKey;
-	g_gemMatHammer[3] = BlueHammerAnimTextureKey;
-	g_gemMatHammer[4] = OrangeHammerAnimTextureKey;
+		g_gemMatHammer[0] = GreenHammerAnimTextureKey;
+		g_gemMatHammer[1] = RedHammerAnimTextureKey;
+		g_gemMatHammer[2] = YellowHammerAnimTextureKey;
+		g_gemMatHammer[3] = BlueHammerAnimTextureKey;
+		g_gemMatHammer[4] = OrangeHammerAnimTextureKey;
 
-	g_gemMatSp[0] = StarpowerAnimTextureKey;
-	g_gemMatSp[1] = StarpowerAnimTextureKey;
-	g_gemMatSp[2] = StarpowerAnimTextureKey;
-	g_gemMatSp[3] = StarpowerAnimTextureKey;
-	g_gemMatSp[4] = StarpowerAnimTextureKey;
+		g_gemMatSp[0] = StarpowerAnimTextureKey;
+		g_gemMatSp[1] = StarpowerAnimTextureKey;
+		g_gemMatSp[2] = StarpowerAnimTextureKey;
+		g_gemMatSp[3] = StarpowerAnimTextureKey;
+		g_gemMatSp[4] = StarpowerAnimTextureKey;
 
-	g_gemMatHammerSp[0] = StarpowerHammerAnimTextureKey;
-	g_gemMatHammerSp[1] = StarpowerHammerAnimTextureKey;
-	g_gemMatHammerSp[2] = StarpowerHammerAnimTextureKey;
-	g_gemMatHammerSp[3] = StarpowerHammerAnimTextureKey;
-	g_gemMatHammerSp[4] = StarpowerHammerAnimTextureKey;
+		g_gemMatHammerSp[0] = StarpowerHammerAnimTextureKey;
+		g_gemMatHammerSp[1] = StarpowerHammerAnimTextureKey;
+		g_gemMatHammerSp[2] = StarpowerHammerAnimTextureKey;
+		g_gemMatHammerSp[3] = StarpowerHammerAnimTextureKey;
+		g_gemMatHammerSp[4] = StarpowerHammerAnimTextureKey;
 
-	g_gemMatTap[0] = GreenTapTextureKey;
-	g_gemMatTap[1] = RedTapTextureKey;
-	g_gemMatTap[2] = YellowTapTextureKey;
-	g_gemMatTap[3] = BlueTapTextureKey;
-	g_gemMatTap[4] = OrangeTapTextureKey;
+		g_gemMatTap[0] = GreenTapTextureKey;
+		g_gemMatTap[1] = RedTapTextureKey;
+		g_gemMatTap[2] = YellowTapTextureKey;
+		g_gemMatTap[3] = BlueTapTextureKey;
+		g_gemMatTap[4] = OrangeTapTextureKey;
 
-	g_gemMatTapStar[0] = GreenTapStarTextureKey;
-	g_gemMatTapStar[1] = RedTapStarTextureKey;
-	g_gemMatTapStar[2] = YellowTapStarTextureKey;
-	g_gemMatTapStar[3] = BlueTapStarTextureKey;
-	g_gemMatTapStar[4] = OrangeTapStarTextureKey;
+		g_gemMatTapStar[0] = GreenTapStarTextureKey;
+		g_gemMatTapStar[1] = RedTapStarTextureKey;
+		g_gemMatTapStar[2] = YellowTapStarTextureKey;
+		g_gemMatTapStar[3] = BlueTapStarTextureKey;
+		g_gemMatTapStar[4] = OrangeTapStarTextureKey;
 
-	g_gemMatTapSp[0] = StarpowerTapTextureKey;
-	g_gemMatTapSp[1] = StarpowerTapTextureKey;
-	g_gemMatTapSp[2] = StarpowerTapTextureKey;
-	g_gemMatTapSp[3] = StarpowerTapTextureKey;
-	g_gemMatTapSp[4] = StarpowerTapTextureKey;
+		g_gemMatTapSp[0] = StarpowerTapTextureKey;
+		g_gemMatTapSp[1] = StarpowerTapTextureKey;
+		g_gemMatTapSp[2] = StarpowerTapTextureKey;
+		g_gemMatTapSp[3] = StarpowerTapTextureKey;
+		g_gemMatTapSp[4] = StarpowerTapTextureKey;
+	}
+	else
+	{
+		g_gemMatNormal[0] = GreenTextureKey;
+		g_gemMatNormal[1] = RedTextureKey;
+		g_gemMatNormal[2] = YellowTextureKey;
+		g_gemMatNormal[3] = BlueTextureKey;
+		g_gemMatNormal[4] = OrangeTextureKey;
+
+		g_gemMatHammer[0] = GreenHammerTextureKey;
+		g_gemMatHammer[1] = RedHammerTextureKey;
+		g_gemMatHammer[2] = YellowHammerTextureKey;
+		g_gemMatHammer[3] = BlueHammerTextureKey;
+		g_gemMatHammer[4] = OrangeHammerTextureKey;
+
+		g_gemMatSp[0] = StarpowerTextureKey;
+		g_gemMatSp[1] = StarpowerTextureKey;
+		g_gemMatSp[2] = StarpowerTextureKey;
+		g_gemMatSp[3] = StarpowerTextureKey;
+		g_gemMatSp[4] = StarpowerTextureKey;
+
+		g_gemMatHammerSp[0] = StarpowerHammerTextureKey;
+		g_gemMatHammerSp[1] = StarpowerHammerTextureKey;
+		g_gemMatHammerSp[2] = StarpowerHammerTextureKey;
+		g_gemMatHammerSp[3] = StarpowerHammerTextureKey;
+		g_gemMatHammerSp[4] = StarpowerHammerTextureKey;
+
+		g_gemMatTap[0] = GreenTapTextureKey;
+		g_gemMatTap[1] = RedTapTextureKey;
+		g_gemMatTap[2] = YellowTapTextureKey;
+		g_gemMatTap[3] = BlueTapTextureKey;
+		g_gemMatTap[4] = OrangeTapTextureKey;
+
+		g_gemMatTapStar[0] = GreenTapStarTextureKey;
+		g_gemMatTapStar[1] = RedTapStarTextureKey;
+		g_gemMatTapStar[2] = YellowTapStarTextureKey;
+		g_gemMatTapStar[3] = BlueTapStarTextureKey;
+		g_gemMatTapStar[4] = OrangeTapStarTextureKey;
+
+		g_gemMatTapSp[0] = StarpowerTapTextureKey;
+		g_gemMatTapSp[1] = StarpowerTapTextureKey;
+		g_gemMatTapSp[2] = StarpowerTapTextureKey;
+		g_gemMatTapSp[3] = StarpowerTapTextureKey;
+		g_gemMatTapSp[4] = StarpowerTapTextureKey;
+	}
 
 	__asm popad;
 	__asm retn;
@@ -112,9 +158,17 @@ void __declspec(naked) setupOpenNote()
 	g_gemMatWhammy[5] = g_gemMatWhammy[2];
 	g_gemMatSpWhammy[5] = g_gemMatSpWhammy[2];
 
-	g_gemMatTap[5] = OpenHammerTextureKey;
-	g_gemMatTapStar[5] = OpenStarHammerTextureKey;
-	g_gemMatTapSp[5] = OpenStarpowerHammerTextureKey;
+	if(openTapsEnabled)
+	{
+		g_gemMatTap[5] = OpenTapTextureKey;
+		g_gemMatTapStar[5] = OpenStarTapTextureKey;
+		g_gemMatTapSp[5] = OpenStarpowerTapTextureKey;
+	}
+	else {
+		g_gemMatTap[5] = OpenHammerTextureKey;
+		g_gemMatTapStar[5] = OpenStarHammerTextureKey;
+		g_gemMatTapSp[5] = OpenStarpowerHammerTextureKey;
+	}
 
 	__asm popad;
 	__asm retn;

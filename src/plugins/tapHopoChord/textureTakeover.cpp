@@ -119,10 +119,17 @@ static std::map<uint32_t, WeirdTextureStruct> g_weirdMap;
 static constexpr std::pair<GH3::QbKey, GH3::QbKey> g_texKeyMapping[] = {
 	{ RawOpenTextureKey, OpenTextureKey },
 	{ RawOpenHammerTextureKey, OpenHammerTextureKey },
+	{ RawOpenTapTextureKey, OpenTapTextureKey },
+	{ RawOpenAnimTextureKey, OpenAnimTextureKey },
+	{ RawOpenAnimHammerTextureKey, OpenAnimHammerTextureKey },
 	{ RawOpenStarTextureKey, OpenStarTextureKey },
 	{ RawOpenStarHammerTextureKey, OpenStarHammerTextureKey },
+	{ RawOpenStarTapTextureKey, OpenStarTapTextureKey },
 	{ RawOpenStarpowerTextureKey, OpenStarpowerTextureKey },
 	{ RawOpenStarpowerHammerTextureKey, OpenStarpowerHammerTextureKey },
+	{ RawOpenStarpowerTapTextureKey, OpenStarpowerTapTextureKey },
+	{ RawOpenAnimStarpowerTextureKey, OpenAnimStarpowerTextureKey },
+	{ RawOpenAnimStarpowerHammerTextureKey, OpenAnimStarpowerHammerTextureKey },
 
 	{ RawGreenAnimTextureKey, GreenAnimTextureKey },
 	{ RawGreenHammerAnimTextureKey, GreenHammerAnimTextureKey },
@@ -283,6 +290,16 @@ bool  __stdcall storeSpecialTextures(GH3::QbImage *img, GH3::TextureMetadata *me
 		g_metadataMap[textureKey] = metadata;
 		g_imageMap[textureKey] = img;
 		g_weirdMap[textureKey] = WeirdTextureStruct();
+
+		// Try to detect which features the current zones support
+		if(metadata->key == RawGreenAnimTextureKey)
+		{
+			animNotesEnabled = true;
+		}
+		else if(metadata->key == RawOpenTapTextureKey)
+		{
+			openTapsEnabled = true;
+		}
 	}
 
 	return false;

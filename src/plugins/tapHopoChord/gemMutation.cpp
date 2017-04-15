@@ -85,54 +85,74 @@ void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 
 	if (!buttonModelSetupComplete) {
 		auto green = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("green")->value);
-		green.GetItem("gem_material")->value = (uint32_t)GreenAnimTextureKey;
-		green.GetItem("gem_hammer_material")->value = (uint32_t)GreenHammerAnimTextureKey;
-		green.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
-		green.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+		auto red = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("red")->value);
+		auto yellow = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("yellow")->value);
+		auto blue = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("blue")->value);
+		auto orange = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("orange")->value);
+		auto open = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("open")->value);
+
+		if(animNotesEnabled)
+		{
+			green.GetItem("gem_material")->value = (uint32_t)GreenAnimTextureKey;
+			green.GetItem("gem_hammer_material")->value = (uint32_t)GreenHammerAnimTextureKey;
+			green.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			green.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			
+			red.GetItem("gem_material")->value = (uint32_t)RedAnimTextureKey;
+			red.GetItem("gem_hammer_material")->value = (uint32_t)RedHammerAnimTextureKey;
+			red.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			red.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			
+			yellow.GetItem("gem_material")->value = (uint32_t)YellowAnimTextureKey;
+			yellow.GetItem("gem_hammer_material")->value = (uint32_t)YellowHammerAnimTextureKey;
+			yellow.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			yellow.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			blue.GetItem("gem_material")->value = (uint32_t)BlueAnimTextureKey;
+			blue.GetItem("gem_hammer_material")->value = (uint32_t)BlueHammerAnimTextureKey;
+			blue.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			blue.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			orange.GetItem("gem_material")->value = (uint32_t)OrangeAnimTextureKey;
+			orange.GetItem("gem_hammer_material")->value = (uint32_t)OrangeHammerAnimTextureKey;
+			orange.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			orange.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+		}
+
 		green.InsertQbKeyItem("gem_tap_material", GreenTapTextureKey);
 		green.InsertQbKeyItem("star_tap_material", GreenTapStarTextureKey);
 		green.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
 
-		auto red = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("red")->value);
-		red.GetItem("gem_material")->value = (uint32_t)RedAnimTextureKey;
-		red.GetItem("gem_hammer_material")->value = (uint32_t)RedHammerAnimTextureKey;
-		red.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
-		red.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
 		red.InsertQbKeyItem("gem_tap_material", RedTapTextureKey);
 		red.InsertQbKeyItem("star_tap_material", RedTapStarTextureKey);
 		red.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
 
-		auto yellow = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("yellow")->value);
-		yellow.GetItem("gem_material")->value = (uint32_t)YellowAnimTextureKey;
-		yellow.GetItem("gem_hammer_material")->value = (uint32_t)YellowHammerAnimTextureKey;
-		yellow.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
-		yellow.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
 		yellow.InsertQbKeyItem("gem_tap_material", YellowTapTextureKey);
 		yellow.InsertQbKeyItem("star_tap_material", YellowTapStarTextureKey);
 		yellow.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
 
-		auto blue = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("blue")->value);
-		blue.GetItem("gem_material")->value = (uint32_t)BlueAnimTextureKey;
-		blue.GetItem("gem_hammer_material")->value = (uint32_t)BlueHammerAnimTextureKey;
-		blue.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
-		blue.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
 		blue.InsertQbKeyItem("gem_tap_material", BlueTapTextureKey);
 		blue.InsertQbKeyItem("star_tap_material", BlueTapStarTextureKey);
 		blue.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
 
-		auto orange = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("orange")->value);
-		orange.GetItem("gem_material")->value = (uint32_t)OrangeAnimTextureKey;
-		orange.GetItem("gem_hammer_material")->value = (uint32_t)OrangeHammerAnimTextureKey;
-		orange.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
-		orange.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
 		orange.InsertQbKeyItem("gem_tap_material", OrangeTapTextureKey);
 		orange.InsertQbKeyItem("star_tap_material", OrangeTapStarTextureKey);
 		orange.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
 
-		auto open = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("open")->value);
-		open.InsertQbKeyItem("gem_tap_material", OpenHammerTextureKey);
-		open.InsertQbKeyItem("star_tap_material", OpenStarHammerTextureKey);
-		open.InsertQbKeyItem("star_power_tap_material", OpenStarpowerHammerTextureKey);
+		if (openTapsEnabled) {
+			open.InsertQbKeyItem("gem_tap_material", OpenTapTextureKey);
+			open.InsertQbKeyItem("star_tap_material", OpenStarTapTextureKey);
+			open.InsertQbKeyItem("star_power_tap_material", OpenStarpowerTapTextureKey);
+		}
+		else
+		{
+			open.InsertQbKeyItem("gem_tap_material", OpenHammerTextureKey);
+			open.InsertQbKeyItem("star_tap_material", OpenStarHammerTextureKey);
+			open.InsertQbKeyItem("star_power_tap_material", OpenStarpowerHammerTextureKey);
+		}
+
 	}
 
 }

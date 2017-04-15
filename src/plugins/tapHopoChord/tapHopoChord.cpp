@@ -5,6 +5,8 @@
 
 GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
+bool animNotesEnabled = false;
+bool openTapsEnabled = false;
 
 void ApplyHack()
 {
