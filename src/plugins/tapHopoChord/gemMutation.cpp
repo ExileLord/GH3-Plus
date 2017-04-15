@@ -7,10 +7,15 @@
 
 #include <cstring>
 
+#define KEY_GEM_TAP_MATERIAL 0x47B075B6
+#define KEY_STAR_TAP_MATERIAL 0x207F3D3C
+#define KEY_STAR_POWER_TAP_MATERIAL 0x50B01943
 
 //////////////////////////////////////////
 // Button model fixing (for open notes) //
 //////////////////////////////////////////
+
+static bool buttonModelSetupComplete = false;
 
 void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 {
@@ -76,6 +81,80 @@ void __fastcall buttonModelsInjector(GH3::QbStruct *buttonModels)
 
 		buttonModels->InsertQbStructItem(openKey, openModel);
 	}
+
+
+	if (!buttonModelSetupComplete) {
+		auto green = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("green")->value);
+		auto red = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("red")->value);
+		auto yellow = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("yellow")->value);
+		auto blue = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("blue")->value);
+		auto orange = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("orange")->value);
+		auto open = *reinterpret_cast<GH3::QbStruct*>(buttonModels->GetItem("open")->value);
+
+		if(animNotesEnabled)
+		{
+			green.GetItem("gem_material")->value = (uint32_t)GreenAnimTextureKey;
+			green.GetItem("gem_hammer_material")->value = (uint32_t)GreenHammerAnimTextureKey;
+			green.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			green.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			
+			red.GetItem("gem_material")->value = (uint32_t)RedAnimTextureKey;
+			red.GetItem("gem_hammer_material")->value = (uint32_t)RedHammerAnimTextureKey;
+			red.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			red.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			
+			yellow.GetItem("gem_material")->value = (uint32_t)YellowAnimTextureKey;
+			yellow.GetItem("gem_hammer_material")->value = (uint32_t)YellowHammerAnimTextureKey;
+			yellow.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			yellow.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			blue.GetItem("gem_material")->value = (uint32_t)BlueAnimTextureKey;
+			blue.GetItem("gem_hammer_material")->value = (uint32_t)BlueHammerAnimTextureKey;
+			blue.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			blue.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+
+			orange.GetItem("gem_material")->value = (uint32_t)OrangeAnimTextureKey;
+			orange.GetItem("gem_hammer_material")->value = (uint32_t)OrangeHammerAnimTextureKey;
+			orange.GetItem("star_power_material")->value = (uint32_t)StarpowerAnimTextureKey;
+			orange.GetItem("star_power_hammer_material")->value = (uint32_t)StarpowerHammerAnimTextureKey;
+		}
+
+		green.InsertQbKeyItem("gem_tap_material", GreenTapTextureKey);
+		green.InsertQbKeyItem("star_tap_material", GreenTapStarTextureKey);
+		green.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
+
+		red.InsertQbKeyItem("gem_tap_material", RedTapTextureKey);
+		red.InsertQbKeyItem("star_tap_material", RedTapStarTextureKey);
+		red.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
+
+		yellow.InsertQbKeyItem("gem_tap_material", YellowTapTextureKey);
+		yellow.InsertQbKeyItem("star_tap_material", YellowTapStarTextureKey);
+		yellow.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
+
+		blue.InsertQbKeyItem("gem_tap_material", BlueTapTextureKey);
+		blue.InsertQbKeyItem("star_tap_material", BlueTapStarTextureKey);
+		blue.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
+
+		orange.InsertQbKeyItem("gem_tap_material", OrangeTapTextureKey);
+		orange.InsertQbKeyItem("star_tap_material", OrangeTapStarTextureKey);
+		orange.InsertQbKeyItem("star_power_tap_material", StarpowerTapTextureKey);
+
+		if (openTapsEnabled) {
+			open.InsertQbKeyItem("gem_tap_material", OpenTapTextureKey);
+			open.InsertQbKeyItem("star_tap_material", OpenStarTapTextureKey);
+			open.InsertQbKeyItem("star_power_tap_material", OpenStarpowerTapTextureKey);
+		}
+		else
+		{
+			open.InsertQbKeyItem("gem_tap_material", OpenHammerTextureKey);
+			open.InsertQbKeyItem("star_tap_material", OpenStarHammerTextureKey);
+			open.InsertQbKeyItem("star_power_tap_material", OpenStarpowerHammerTextureKey);
+		}
+
+	}
+
 }
 
 static void * const buttonModelsInjectorDetour = (void *)0x0042740F;
@@ -127,8 +206,7 @@ _declspec(naked) void gemMutationSPActivationBranchNaked()
 		jz		HAMMER;
 
 		//Tap Notes
-		mov		eax, SP_TAP_NOTE_GEM_INDEX;
-		mov     eax, [g_gemMatBattle + eax * 4]; // g_gemMatHammerSp2[eax * 4]
+		mov     eax, [g_gemMatTapSp + eax * 4]; // g_gemMatHammerSp2[eax * 4]
 		mov     ecx, [ADDR_someStruct + esi * 4];	//this
 		push    eax;	//textureKey
 		jmp     gemMutationSPActivationBranch_Tap;
@@ -159,7 +237,7 @@ _declspec(naked) void gemMutationSPDeactivationBranchNaked()
 		jz		HAMMER;
 
 	//TAP:
-		mov     eax, KEY_BATTLE_STAR_MATERIAL;
+		mov     eax, KEY_GEM_TAP_MATERIAL;
 		jmp     gemMutationSPDeactivationBranch_HammerOrTap;
 
 	NO_HAMMER:
@@ -185,7 +263,7 @@ _declspec(naked) void gemMutationPhraseMissBranchNaked()
 		jz		HAMMER;
 
 		//Tap Notes
-		mov     eax, KEY_BATTLE_STAR_MATERIAL;
+		mov     eax, KEY_GEM_TAP_MATERIAL;
 		jmp     gemMutationPhraseMissBranch_HammerAndTap;
 
 	NO_HAMMER:
@@ -216,7 +294,7 @@ _declspec(naked) void gemMutationSPtoStarBranchNaked()
 
 		//Tap Notes
 		mov     ecx, [esp + 10h]; //this //[esp + 0F4h + keyDest]
-		mov     eax, KEY_BATTLE_STAR_HAMMER_MATERIAL;
+		mov     eax, KEY_STAR_TAP_MATERIAL;
 		jmp     gemMutationSPtoStarBranch_Tap;
 
 	NO_HAMMER:
@@ -230,8 +308,8 @@ _declspec(naked) void gemMutationSPtoStarBranchNaked()
 
 
 // 00427AAB
-static void * const gemMutationStarOverlapBranch = (void *)0x00427AAB; //redirect to gemMutationStarOverlapBranchNaked
-static void * const gemMutationStarOverlapBranch_Exit = (void *)0x00427646;
+static void * const gemMutationStarOverlapBranch = (void *)0x00427A9B; //redirect to gemMutationStarOverlapBranchNaked
+static void * const gemMutationStarOverlapBranch_Exit = (void *)0x00427AA0;
 
 // Fixes tap note mutation upon star power overlapping (previously) star gems
 _declspec(naked) void gemMutationStarOverlapBranchNaked()
@@ -243,10 +321,11 @@ _declspec(naked) void gemMutationStarOverlapBranchNaked()
 		jz		HAMMER;
 
 		//Tap Notes
-		mov		eax, SP_TAP_NOTE_GEM_INDEX;
-		mov     eax, [g_gemMatBattle + eax * 4]; // g_gemMatHammerSp2[eax * 4]
+		mov     eax, KEY_STAR_POWER_TAP_MATERIAL
+		jmp		gemMutationStarOverlapBranch_Exit;
 
 	HAMMER:
+		mov     eax, KEY_STAR_POWER_HAMMER_MATERIAL
 		jmp		gemMutationStarOverlapBranch_Exit;
 	}
 }
