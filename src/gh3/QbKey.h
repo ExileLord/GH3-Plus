@@ -60,25 +60,6 @@ namespace GH3
 			0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D,
 		};
 
-		//static uint32_t crc32(const char *key, uint32_t previousKey = 0xFFFFFFFF)
-		//{
-		//	if (key == nullptr)
-		//		return 0;
-		//
-		//	char c = *key;
-		//	uint32_t crc = previousKey;
-		//	for (const char *i = (key + 1); c != '\0'; ++i)
-		//	{
-		//		if ((c - 'A') <= 25)                   // If character is uppercase, convert to lowercase
-		//			c += 32;
-		//		if (c == '/')
-		//			c = '\\';
-		//		crc = crc32tab[(crc ^ c) & 0xFF] ^ (crc >> 8);
-		//		c = *i;
-		//	}
-		//	return crc;
-		//}
-
 		char constexpr fixChar(char c)
 		{
 			return	(c >= 'A' && c <= 'Z') ? (c + 32) :
@@ -98,19 +79,6 @@ namespace GH3
 					(hash(key + 1, hashChar(*key, previousKey)));
 		}
 
-
-
-
-
-		//testing2
-		uint32_t constexpr hash2(const char *key, uint32_t previousKey = 0xFFFFFFFF)
-		{
-			return 	(*key == '\0') ? previousKey :
-					(hash2(key + 1, hashChar(*key, previousKey)));
-		}
-
-
-
 	}
 
 
@@ -125,7 +93,7 @@ namespace GH3
 		uint32_t m_key;
 
 	public:
-		/// Initialized a QbKey with a value of 0
+		/// Initializes a QbKey with a value of 0
 		constexpr QbKey() : m_key(0) {};
 
 		constexpr QbKey(const QbKey &rhs) : m_key(rhs.m_key) {};
@@ -141,11 +109,6 @@ namespace GH3
 
 
 		inline QbKey& operator=(const uint32_t rhs) { m_key = rhs; return *this; };
-		
-		//Mutators
-		/// Chains a string to the end of the QbKey
-		//QbKey& operator+=(const char *rhs);
-		
 
 	};
 

@@ -253,27 +253,84 @@ namespace GH3
 	}
 
 
-	void __thiscall QbStruct::InsertQbStructItem(QbKey qbKey, QbStruct * item)
+
+
+
+
+
+	////////////////////////////////
+	// Native Insertion Functions //
+	////////////////////////////////
+
+	template<uint32_t address, typename T>
+	inline void __declspec(naked) __stdcall NativeInsertCall(QbStruct *qbStruct, QbKey qbKey, T item)
 	{
-		static const void * const nativeFunction = (void *)0x00479E40;
+		static const void * const nativeFunction = (void *)address;
 		__asm
 		{
-			push item;
-			push qbKey;
+			//Have to use [esp] because Visual Studio expects there to be a base pointer if you use variable names and we're not using 
+			mov ecx, [esp+4];
+			push [esp+0Ch];
+			push [esp+0Ch];
 			call nativeFunction;
+			retn 0Ch;
 		}
+	}
+	void __thiscall QbStruct::InsertCStringItem(QbKey qbKey, char *item) {
+		NativeInsertCall<0x00479AC0, char *>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertWStringItem(QbKey qbKey, wchar_t *item) {
+		NativeInsertCall<0x00479B20, wchar_t *>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertStringPointerItem(QbKey qbKey, uint32_t item) {
+		NativeInsertCall<0x00479B80, uint32_t>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertIntItem(QbKey qbKey, int32_t item) {
+		NativeInsertCall<0x00479BD0, int32_t>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertUIntItem(QbKey qbKey, uint32_t item) {
+		NativeInsertCall<0x00479BD0, uint32_t>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertFloatItem(QbKey qbKey, float item) {
+		NativeInsertCall<0x00479C20, float>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertQbKeyItem(QbKey qbKey, QbKey item) {
+		NativeInsertCall<0x00479C80, QbKey>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertVectorItem(QbKey qbKey, QbVector *item) {
+		NativeInsertCall<0x00479CD0, QbVector *>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertPairItem(QbKey qbKey, QbPair *item) {
+		NativeInsertCall<0x00479D60, QbPair *>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertQbArrayItem(QbKey qbKey, QbArray *item) {
+		NativeInsertCall<0x00479DF0, QbArray *>(this, qbKey, item);
+	}
+	void __thiscall QbStruct::InsertQbStructItem(QbKey qbKey, QbStruct *item) {
+		NativeInsertCall<0x00479E40, QbStruct *>(this, qbKey, item);
 	}
 
-	void __thiscall QbStruct::InsertQbKeyItem(QbKey qbKey, QbKey item)
-	{
-		static const void * const nativeFunction = (void *)0x00479C80;
-		__asm
-		{
-			push item;
-			push qbKey;
-			call nativeFunction;
-		}
-	}
+	//void __thiscall QbStruct::InsertQbStructItem(QbKey qbKey, QbStruct * item)
+	//{
+	//	static const void * const nativeFunction = (void *)0x00479E40;
+	//	__asm
+	//	{
+	//		push item;
+	//		push qbKey;
+	//		call nativeFunction;
+	//	}
+	//}
+	//
+	//void __thiscall QbStruct::InsertQbKeyItem(QbKey qbKey, QbKey item)
+	//{
+	//	static const void * const nativeFunction = (void *)0x00479C80;
+	//	__asm
+	//	{
+	//		push item;
+	//		push qbKey;
+	//		call nativeFunction;
+	//	}
+	//}
 
 
 

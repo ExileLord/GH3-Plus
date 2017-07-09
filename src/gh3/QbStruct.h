@@ -11,7 +11,7 @@
 namespace GH3
 {
 
-	enum QbNodeFlags : __int8
+	enum GH3P_API QbNodeFlags : __int8
 	{
 		QFlagStructItem = 0x1,
 		QTypeInt = 0x2,
@@ -83,8 +83,18 @@ namespace GH3
 		bool ContainsItem(QbKey qbKey);
 		bool ContainsItem(QbKey qbKey, QbValueType type);
 
-		void __thiscall InsertQbStructItem(QbKey qbKey, QbStruct *item);
+		void __thiscall InsertCStringItem(QbKey qbKey, char *item);
+		void __thiscall InsertWStringItem(QbKey qbKey, wchar_t *item);
+		void __thiscall InsertStringPointerItem(QbKey qbKey, uint32_t item);
+		void __thiscall InsertIntItem(QbKey qbKey, int32_t item);
+		void __thiscall InsertUIntItem(QbKey qbKey, uint32_t item);
+		void __thiscall InsertFloatItem(QbKey qbKey, float item);
 		void __thiscall InsertQbKeyItem(QbKey qbKey, QbKey item);
+		void __thiscall InsertVectorItem(QbKey qbKey, QbVector *item);
+		void __thiscall InsertPairItem(QbKey qbKey, QbPair *item);
+		void __thiscall InsertQbArrayItem(QbKey qbKey, QbArray *item);
+		void __thiscall InsertQbStructItem(QbKey qbKey, QbStruct *item);
+		
 	};
 
 }

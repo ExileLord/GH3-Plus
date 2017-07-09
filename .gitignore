@@ -20,6 +20,7 @@ bin/
 Release/
 Debug/
 /src/plugins/giveMeTimeToHookUpAGodDamnDebugger
+/src/plugins/helgaBot
 /src/plugins/GH3+ Plugin Project
 
 *.opendb

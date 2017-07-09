@@ -42,9 +42,6 @@
     <ClCompile Include="..\gh3\QbStruct.cpp">
       <Filter>Source Files\GH3</Filter>
     </ClCompile>
-    <ClCompile Include="..\gh3\QbKey.cpp">
-      <Filter>Source Files\GH3</Filter>
-    </ClCompile>
     <ClCompile Include="..\gh3\QbMap.cpp">
       <Filter>Source Files\GH3</Filter>
     </ClCompile>
@@ -105,7 +102,7 @@
       <Filter>Header Files\GH3</Filter>
     </ClInclude>
     <ClInclude Include="..\gh3\malloc.h">
-      <Filter>Source Files\GH3</Filter>
+      <Filter>Header Files\GH3</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

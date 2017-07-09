@@ -60,8 +60,6 @@ void __declspec(naked) setupOpenNote()
 	g_gemMatWhammy[5] = g_gemMatWhammy[2];
 	g_gemMatSpWhammy[5] = g_gemMatSpWhammy[2];
 
-
-
 	__asm popad;
 	__asm retn;
 }
@@ -116,7 +114,7 @@ void __declspec(naked) gemConstantFixingNaked()
 		add     esi, 4;
 		cmp     esi, 20;
 		jl      LOOP_ADDRESS;
-		call    setupOpenNote;
+		call    setupOpenNote; //
 		jmp     returnAddress;
 	LOOP_ADDRESS:
 		jmp		loopAddress;
