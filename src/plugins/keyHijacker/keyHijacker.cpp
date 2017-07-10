@@ -7,6 +7,7 @@
 #include <mmsystem.h>
 #include <string>
 #include <cstdio>
+#include <cmath>
 #pragma comment(lib,"Winmm.lib")
 
 static const LPVOID changeDetour = (LPVOID)0x00538EF0;
@@ -21,11 +22,12 @@ static uint32_t changePitchStruct[] = { 0x00010000, 0xCDCDCDCD,
 #endif
 
 static float g_hackedSpeed = 1.0f;
-static float g_hackedSpeed_old = 1.0f;
 static float g_hackedPitch = 1.0f;
 
 static float *g_currentScrollTime = (float *)ADDR_Hyperspeed_;
 static float storedScrollTime = 0.0f;
+static float scrollTimeMultiplier = 1.0f;
+static float currentInputValue = 0.0f;
 
 static int32_t g_currentInt = 100;
 static int32_t g_multiplier = 0;
@@ -225,22 +227,24 @@ _declspec(naked) void checkKeysNaked()
 
 void checkScrollTime()
 {
-	if (*g_currentScrollTime != 1000 * storedScrollTime && trunc(1000 * *g_currentScrollTime) != trunc(1000 * storedScrollTime*g_hackedSpeed))
-	//Validates the current scroll time against the stored one
+	if (*g_currentScrollTime != storedScrollTime*scrollTimeMultiplier)
 	{
-		if (trunc(1000 * *g_currentScrollTime) != trunc(1000 * storedScrollTime*g_hackedSpeed_old))
-			 //See below comment
-		{
-			storedScrollTime = *g_currentScrollTime; //If the value stored is completely invalid (before a song starts)
-													 //It will pull it from the current scroll time.
-		}
-		else //This stops you having to restart twice after changing speed
-			 //because it is run before the game restarts.
-		{
-			*g_currentScrollTime = storedScrollTime;
-			g_hackedSpeed_old = g_hackedSpeed;
-		}
+		storedScrollTime = (float)((double)*g_currentScrollTime / (double)scrollTimeMultiplier);
 	}
+}
+
+int compareScrollTime()
+{
+	if (trunc(1000 * currentInputValue) == trunc(1000 * storedScrollTime))
+	{
+		return 1;
+	}
+	return 0;
+}
+
+void setScrollMultiplier()
+{
+	scrollTimeMultiplier = (float)std::pow(1.1, (double)(g_hackedSpeed - 1)*2);
 }
 
 _declspec(naked) void changeScrollTimeNaked()
@@ -250,19 +254,23 @@ _declspec(naked) void changeScrollTimeNaked()
 	_asm
 	{
 		movss	[esi + 8], xmm0;
-		mov		edi, [esi + 8]; //Using edi because it gets overwritten after jump
 		pushad;
 		call	checkScrollTime; //Corrects the stored scroll time if necessary
-		popad;
-		cmp		edi, storedScrollTime;
+		mov		edi, [esi + 8] //Using edi because it is overwritten after this function
+		mov		currentInputValue, edi;
+		call	compareScrollTime;
+		cmp		eax, 1;
 		je		MULTIPLY;
+		popad;
 
 	EXIT:
 		jmp		returnAddress;
 
 	MULTIPLY:
+		call	setScrollMultiplier;
+		popad;
 		fld		[esi + 8];
-		fmul	g_hackedSpeed;
+		fmul	scrollTimeMultiplier;
 		fstp	[esi + 8];
 		jmp		EXIT;
 	}
