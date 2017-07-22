@@ -12,7 +12,10 @@
 
 static const LPVOID changeDetour = (LPVOID)0x00538EF0;
 static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
-static const LPVOID scrollTimeDetour = (LPVOID)0x00539004;
+
+static const LPVOID scrollTimeDetour = (LPVOID)0x0042598F;
+static const LPVOID scrollTimeNOPAddr = (LPVOID)0x00425994;
+
 static uint32_t changeSpeedStruct[] = { 0x00010000, 0xCDCDCDCD,
     0x00000500, 0x16D91BC1, 0x3F800000, 0x00000000 };
 #ifdef PITCHSHIFT
@@ -24,10 +27,7 @@ static uint32_t changePitchStruct[] = { 0x00010000, 0xCDCDCDCD,
 static float g_hackedSpeed = 1.0f;
 static float g_hackedPitch = 1.0f;
 
-static float *g_currentScrollTime = (float *)ADDR_Hyperspeed_;
-static float storedScrollTime = 0.0f;
 static float scrollTimeMultiplier = 1.0f;
-static float currentInputValue = 0.0f;
 
 static int32_t g_currentInt = 100;
 static int32_t g_multiplier = 0;
@@ -224,55 +224,25 @@ _declspec(naked) void checkKeysNaked()
     }
 }
 
-
-void checkScrollTime()
-{
-	if (*g_currentScrollTime != storedScrollTime*scrollTimeMultiplier)
-	{
-		storedScrollTime = (float)((double)*g_currentScrollTime / (double)scrollTimeMultiplier);
-	}
-}
-
-int compareScrollTime()
-{
-	if (trunc(1000 * currentInputValue) == trunc(1000 * storedScrollTime))
-	{
-		return 1;
-	}
-	return 0;
-}
-
 void setScrollMultiplier()
 {
-	scrollTimeMultiplier = (float)std::pow(1.1, (double)(g_hackedSpeed - 1)*2);
+	scrollTimeMultiplier = std::pow(1.1f, (g_hackedSpeed - 1)*2);
 }
 
 _declspec(naked) void changeScrollTimeNaked()
 {
-	static const uint32_t returnAddress = 0x00539009;
-
+	static const uint32_t returnAddress = 0x00425995;
 	_asm
 	{
-		movss	[esi + 8], xmm0;
 		pushad;
-		call	checkScrollTime; //Corrects the stored scroll time if necessary
-		mov		edi, [esi + 8] //Using edi because it is overwritten after this function
-		mov		currentInputValue, edi;
-		call	compareScrollTime;
-		cmp		eax, 1;
-		je		MULTIPLY;
-		popad;
-
-	EXIT:
-		jmp		returnAddress;
-
-	MULTIPLY:
 		call	setScrollMultiplier;
 		popad;
-		fld		[esi + 8];
+
+		fld		[esp + 0x14];
 		fmul	scrollTimeMultiplier;
-		fstp	[esi + 8];
-		jmp		EXIT;
+		fstp	[esp + 0x14];
+		movss	xmm0, [esp + 0x14];
+		jmp		returnAddress;
 	}
 }
 
@@ -289,5 +259,7 @@ void ApplyHack()
 
     g_patcher.WriteJmp(changeDetour, &changeOverrideNaked);
     g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
+
+	g_patcher.WriteNOPs(scrollTimeNOPAddr, 1);
 	g_patcher.WriteJmp(scrollTimeDetour, &changeScrollTimeNaked);
 }
