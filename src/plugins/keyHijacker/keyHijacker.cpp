@@ -226,7 +226,7 @@ _declspec(naked) void checkKeysNaked()
 
 void setScrollMultiplier()
 {
-	scrollTimeMultiplier = std::pow(1.1f, (g_hackedSpeed - 1)*2);
+	scrollTimeMultiplier = std::pow(g_hackedSpeed, 4);
 }
 
 _declspec(naked) void changeScrollTimeNaked()
