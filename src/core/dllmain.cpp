@@ -1,4 +1,4 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+// Entry point for GH3+
 #include <Windows.h>
 #include "core.h"
 

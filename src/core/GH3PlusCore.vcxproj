@@ -98,6 +98,7 @@
     <ClCompile Include="..\gh3\GlobalMap.cpp" />
     <ClCompile Include="..\gh3\QbArray.cpp" />
     <ClCompile Include="..\gh3\QbMap.cpp" />
+    <ClCompile Include="..\gh3\QbScript.cpp" />
     <ClCompile Include="..\gh3\QbStruct.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -107,19 +108,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gh3\BinaryTree.h" />
+    <ClInclude Include="..\gh3\CAliveRefCounted.h" />
+    <ClInclude Include="..\gh3\CXboxFont.h" />
     <ClInclude Include="..\gh3\GlobalMap.h" />
+    <ClInclude Include="..\gh3\List.h" />
     <ClInclude Include="..\gh3\malloc.h" />
     <ClInclude Include="..\gh3\QbArray.h" />
     <ClInclude Include="..\gh3\QbImage.h" />
     <ClInclude Include="..\gh3\QbKey.h" />
     <ClInclude Include="..\gh3\QbMap.h" />
     <ClInclude Include="..\gh3\QbPair.h" />
+    <ClInclude Include="..\gh3\QbScript.h" />
     <ClInclude Include="..\gh3\QbStruct.h" />
     <ClInclude Include="..\gh3\QbValueType.h" />
     <ClInclude Include="..\gh3\QbVector.h" />
     <ClInclude Include="..\gh3\TextureMetadata.h" />
     <ClInclude Include="core.h" />
     <ClInclude Include="GH3Plus.h" />
+    <ClInclude Include="..\gh3\CObject.h" />
+    <ClInclude Include="..\gh3\CRefCounted.h" />
+    <ClInclude Include="..\gh3\CScreenElement.h" />
+    <ClInclude Include="..\gh3\CTextElement.h" />
+    <ClInclude Include="..\gh3\CXboxText.h" />
+    <ClInclude Include="..\gh3\SDraw2D.h" />
+    <ClInclude Include="..\gh3\SText.h" />
     <ClInclude Include="Patcher.h" />
     <ClInclude Include="ScopedUnprotect.h" />
     <ClInclude Include="PatchManager.h" />
