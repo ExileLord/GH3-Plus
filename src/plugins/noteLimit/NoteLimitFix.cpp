@@ -5,7 +5,7 @@
 #include "core\Patcher.h"
 #include <stdint.h>
 
-const uint32_t MAX_NOTES = 0x100000; //?1,048,576?
+const uint32_t MAX_NOTES = 0x110000; //?1,048,576?
 const uint32_t GH3_MAX_PLAYERS = 2;
 
 void * const SIZEOP_NOTE_ALLOCATION = (void *)0x0041AA78;

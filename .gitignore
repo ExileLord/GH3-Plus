@@ -11,7 +11,8 @@
 *.obj
 *.aps
 
-
+*.vcxproj.user
+*.vcxproj.filters
 
 /GH3+.VC.db
 /.vs
@@ -21,6 +22,7 @@ Release/
 Debug/
 /src/plugins/giveMeTimeToHookUpAGodDamnDebugger
 /src/plugins/helgaBot
+/src/plugins/spooky
 /src/plugins/GH3+ Plugin Project
 
 *.opendb

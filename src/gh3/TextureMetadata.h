@@ -25,6 +25,8 @@ namespace GH3
 		TM_VolumeTexture = 0x5,
 	};
 
+    /// A structure representing texture metadata, containing information about the texture such as the width, height, and format in addition
+    /// to a pointer to the actual texture itself.
 	struct GH3P_API __declspec(align(4)) TextureMetadata
 	{
 		uint8_t byte0;

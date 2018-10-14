@@ -2,7 +2,7 @@
 
 namespace GH3
 {
-
+    /// Represents any value that can be referenced by GH3's storage system such as the GlobalMap, QbArrays, and QbStructs.
 	enum GH3P_API QbValueType : __int8
 	{
 		TypeUndefined = 0x0,

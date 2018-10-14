@@ -155,8 +155,10 @@ bool __stdcall hitSingleNote(uint32_t pressedFrets, uint32_t noteFrets)
 	if (pressedFrets & FretMask::RED)
 		return (noteFrets == FretMask::RED);
 
-	if (pressedFrets & FretMask::GREEN)
-		return (noteFrets == FretMask::GREEN);	
+    if (pressedFrets & FretMask::GREEN)
+        return (noteFrets == FretMask::GREEN);
+
+    return false;
 }
 
 static void * const noteHitCheckDetour = (void *)0x00431E27;

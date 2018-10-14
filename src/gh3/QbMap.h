@@ -9,7 +9,7 @@
 
 namespace GH3
 {
-
+    /// A GH3 map/dictionary structure. Only stores other types, not native structures.
 	struct GH3P_API QbMap
 	{
 	private:

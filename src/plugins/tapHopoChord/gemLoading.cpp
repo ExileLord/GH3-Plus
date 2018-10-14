@@ -214,12 +214,12 @@ void __declspec(naked) gemStepLoopFixANaked()
 
 
 
-bool __fastcall gemStepLoopFixB(uint32_t gemIndex, QbFretMask fretMask)
+int __fastcall gemStepLoopFixB(uint32_t gemIndex, QbFretMask fretMask)
 {
 	QbFretMask gemMask;
 	if (gemIndex < 5)
 		gemMask = static_cast<QbFretMask>((1 << gemIndex));
-	else if (gemIndex == 5)
+	else
 		gemMask = QbFretMask::QbOpen;
 
 	if (fretMask & QbOpen && gemIndex != 5) //Don't let people make chords with open notes

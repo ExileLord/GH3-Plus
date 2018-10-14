@@ -7,7 +7,7 @@
 
 namespace GH3
 {
-
+    /// Neversoft's array class that is used by the game's scripting engine. Also known as CArray.
 	struct GH3P_API QbArray final
 	{
 

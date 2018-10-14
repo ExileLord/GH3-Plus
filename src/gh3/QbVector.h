@@ -6,7 +6,7 @@
 
 namespace GH3
 {
-
+    /// Neversoft's vector class that is referenced by the scripting engine. A vector of three floats. Also known as CVector
 	struct GH3P_API QbVector
 	{
 		uint8_t gap0[1];

@@ -275,21 +275,11 @@ void __declspec(naked) storeSpecialTexturesNaked()
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 bool TryApplyTextureTakeoverPatches()
 {
 	if (!g_patcher.WriteJmp(storeSpecialTexturesDetour, storeSpecialTexturesNaked) ||
 		!g_patcher.WriteJmp(frankerzDetour, frankerzFixNaked))
 		return false;
+
+    return true;
 }

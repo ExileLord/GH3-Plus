@@ -48,11 +48,8 @@ bool __fastcall IsSingleNote(FretMask fretMask)
 
 FretMask __fastcall GetFretmaskFromTrackArray(GH3::QbArray *trackArray, int currentNote)
 {
-	int size = trackArray->Length();
 	uint32_t result = 0; 
-	int realFretMask;                       
-
-	realFretMask = trackArray->Get(currentNote + 2);
+	int realFretMask = trackArray->Get(currentNote + 2);
 
 	if (realFretMask & QbFretMask::QbOpen)
 		return FretMask::OPEN;
@@ -209,7 +206,7 @@ void __stdcall LoadOpenHopoTappingBits(GH3::QbArray *noteQbArr, GH3::QbArray *pl
 		}
 	}
 
-	hopoFlag = static_cast<HopoFlag>(hopoFlip ^ hopoRaw);
+	hopoFlag = static_cast<HopoFlag>((hopoFlip ? 1 : 0) ^ hopoRaw);
 
 	if (tappingFlag)
 		hopoFlag = HopoFlag::TAPPING;

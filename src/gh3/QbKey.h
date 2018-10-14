@@ -107,7 +107,6 @@ namespace GH3
 		/// Allow integer conversion
 		inline constexpr operator uint32_t() const { return m_key; }
 
-
 		inline QbKey& operator=(const uint32_t rhs) { m_key = rhs; return *this; };
 
 	};

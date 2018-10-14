@@ -40,6 +40,7 @@ __declspec(naked) void tiltFixNaked()
 
         cmp eax, 0;
         jz DONT_ACTIVATE;
+		jmp DONT_ACTIVATE; //remove later
 
     //ACTIVATE:
         popad;

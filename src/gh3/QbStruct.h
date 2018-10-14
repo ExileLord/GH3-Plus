@@ -34,7 +34,7 @@ namespace GH3
 		QTypeMap = 0x36,
 	};
 
-	
+	/// A node in the QbStruct "linked list"
 	struct GH3P_API QbStructItem
 	{
 		uint8_t unkFlag0;
@@ -44,11 +44,12 @@ namespace GH3
 		uint32_t value;
 		QbStructItem *next;
 
-		inline QbValueType Type() { return static_cast<QbValueType>(flags >> 1); }
+		inline QbValueType Type() const { return static_cast<QbValueType>(flags >> 1); }
 
 		QbStructItem(QbNodeFlags aFlags, QbKey aKey, uint32_t aValue);
 	};
 
+    /// Neversoft's struct class that is referenced by the scripting engine. Implemented like a linked list of the items it contains. Also known as CStruct
 	struct GH3P_API QbStruct
 	{
 

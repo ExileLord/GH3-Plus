@@ -19,7 +19,7 @@ namespace GH3
 		bool	 (__thiscall *CreateNewTexture)(QbKey aKey, int cullWidth, int cullHeight, int a5, int a6, int a7, TextureMetadataFormat format);
 	};
 
-	struct __declspec(align(4)) QbImage
+	struct GH3P_API __declspec(align(4)) QbImage
 	{
 		QbImage_VTABLE *vtable;
 		QbKey key;
