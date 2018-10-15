@@ -12,7 +12,6 @@
 *.aps
 
 *.vcxproj.user
-*.vcxproj.filters
 
 /GH3+.VC.db
 /.vs
