@@ -7,10 +7,14 @@
 #include <mmsystem.h>
 #include <string>
 #include <cstdio>
+#include <cmath>
 #pragma comment(lib,"Winmm.lib")
 
 static const LPVOID changeDetour = (LPVOID)0x00538EF0;
 static const LPVOID gameFrameDetour = (LPVOID)0x005B0C50;
+
+static const LPVOID scrollTimeDetour = (LPVOID)0x00538FF9;
+
 static uint32_t changeSpeedStruct[] = { 0x00010000, 0xCDCDCDCD,
     0x00000500, 0x16D91BC1, 0x3F800000, 0x00000000 };
 #ifdef PITCHSHIFT
@@ -216,6 +220,29 @@ _declspec(naked) void checkKeysNaked()
     }
 }
 
+_declspec(naked) void changeScrollTimeNaked()
+{
+	static const uint32_t returnAddress = 0x00538FFE;
+	static const uint32_t callAddress = 0x00478A40;
+	static uint32_t tmpQbKey = 0x0;
+	_asm
+	{
+		mov		tmpQbKey, eax;
+		call	callAddress;
+		cmp		tmpQbKey, KEY_SCROLL_TIME;
+		jne		EXIT;
+
+		fld		[esp + 0x14];
+		fmul	g_hackedSpeed;
+		fstp	[esp + 0x14];
+
+	EXIT:
+		jmp		returnAddress;
+	}
+}
+
+
+
 void ApplyHack()
 {
     // set up pointers within the changeX structs
@@ -227,4 +254,6 @@ void ApplyHack()
 
     g_patcher.WriteJmp(changeDetour, &changeOverrideNaked);
     g_patcher.WriteJmp(gameFrameDetour, &checkKeysNaked);
+
+	g_patcher.WriteJmp(scrollTimeDetour, &changeScrollTimeNaked);
 }
