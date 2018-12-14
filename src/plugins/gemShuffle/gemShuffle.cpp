@@ -10,6 +10,7 @@ static void * const fruityDetour = (void *)0x00432887; //0x004327D2; // 0x004327
 static void * const overstrumDetour1 = (void *)0x004320F0; //overstrum
 
 static uint32_t g_randomIndex;
+static uint32_t openNoteIndex = 5;
 
 static GH3P::Patcher g_patcher = GH3P::Patcher(__FILE__);
 
@@ -24,11 +25,14 @@ __declspec (naked) void fruityNaked()
 
 	__asm
 	{
+		cmp		eax, openNoteIndex;
+		je		EXIT;
 		pushad;
 		call	randomizeIndex;
 		popad;
 		mov		eax, g_randomIndex;
-
+		
+	EXIT:
 		test    ecx, ecx
 		movss	[esp + 34h], xmm0
 
